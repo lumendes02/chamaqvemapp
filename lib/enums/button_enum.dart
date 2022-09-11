@@ -1,0 +1,1 @@
+enum ButtonEnum { square, text }
