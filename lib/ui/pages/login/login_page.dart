@@ -14,13 +14,13 @@ class LoginPage extends StatelessWidget {
       height: 100,
       width: 100,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         body: Stack(children: [
           Container(
             padding: const EdgeInsets.only(left: 35, top: 80),
             child: const Text(
               "ChamaQVEM",
-              style: TextStyle(color: Colors.white, fontSize: 33),
+              style: TextStyle(color: Colors.black, fontSize: 33),
             ),
           ),
           SingleChildScrollView(
@@ -58,6 +58,22 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: 40,
+                ),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () => Get.toNamed('/registrar'),
+                      child: const Text(
+                        'Registrar',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 51, 255, 0),
+                          fontSize: 27,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
