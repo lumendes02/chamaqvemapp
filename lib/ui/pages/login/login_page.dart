@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:chamaqvem/constants.dart';
+import 'package:chamaqvem/ui/pages/login/singup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -63,7 +64,12 @@ class LoginPage extends StatelessWidget {
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-                      onPressed: () => Get.toNamed('/registrar'),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return Singup();
+                        }));
+                      },
                       child: const Text(
                         'Registrar',
                         style: TextStyle(

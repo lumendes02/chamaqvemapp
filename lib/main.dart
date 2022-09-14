@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/home', page: () => HomePage()),
         GetPage(name: '/tipousuario', page: () => UserTypeList()),
         GetPage(name: '/registrar', page: () => Singup()),
+        GetPage(name: '/verusuario', page: () => Singup()),
       ],
     );
   }

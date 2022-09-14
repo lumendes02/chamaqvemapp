@@ -1,7 +1,7 @@
 import 'dart:ffi';
 import 'package:chamaqvem/enums/button_enum.dart';
 import 'package:chamaqvem/models/user_type.dart';
-import 'package:chamaqvem/services/api.dart';
+import 'package:chamaqvem/services/tipousuario_api.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/components/text_field.dart';

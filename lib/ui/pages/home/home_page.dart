@@ -14,6 +14,13 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
+              onPressed: () => Get.toNamed('/verusuario'),
+              child: Text(
+                'Ver perfil',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            TextButton(
               onPressed: () => Get.toNamed('/tipousuario'),
               child: Text(
                 'CRUD tipo usuario',

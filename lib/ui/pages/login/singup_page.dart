@@ -1,13 +1,17 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/enums/button_enum.dart';
+import 'package:chamaqvem/models/user.dart';
 import 'package:chamaqvem/models/user_type.dart';
-import 'package:chamaqvem/services/api.dart';
+import 'package:chamaqvem/services/tipousuario_api.dart';
+import 'package:chamaqvem/services/usuario_api.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/components/masked_textfield.dart';
 import 'package:chamaqvem/ui/components/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,15 +35,30 @@ class _SingupState extends State<Singup> {
   final _cargoController = TextEditingController();
   final _senhaController = TextEditingController();
 
-
   final cpfFormater = MaskTextInputFormatter(mask: '###.###.###-##');
   final celularFormater = MaskTextInputFormatter(mask: '(##) #####-####');
+
+  String? selectedCargo;
+
+  List? data;
+
+  Future GetAllCargos() async {
+    final response =
+        await http.get(Uri.parse("http://localhost:8000/api/tipousuario"));
+    var jsonBody = response.body;
+    var jsonData = json.decode(jsonBody);
+
+    setState(() {
+      data = jsonData;
+    });
+
+    print(jsonData);
+  }
 
   @override
   void initState() {
     super.initState();
-    List dropList;
-    _dropApi();
+    GetAllCargos();
     if (widget.cargo != null) {
       _cargoController.text = widget.cargo!;
     }
@@ -65,6 +84,7 @@ class _SingupState extends State<Singup> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: TextField(
+                          controller: _cpfController,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
                               hintText: "CPF", border: OutlineInputBorder()),
@@ -74,6 +94,7 @@ class _SingupState extends State<Singup> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: TextField(
+                          controller: _telefoneController,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
                               hintText: "Telefone",
@@ -81,12 +102,53 @@ class _SingupState extends State<Singup> {
                           inputFormatters: [celularFormater],
                         ),
                       ),
-                      DropdownButton(items: dropList, onChanged: onChanged)
-                      TextFieldTxt(controller: _cargoController, text: 'Cargo'),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              //background color of dropdown button
+                              border: Border.all(
+                                  color: Colors.black38,
+                                  width: 1), //border of dropdown button
+                              borderRadius: BorderRadius.circular(
+                                  5), //border raiuds of dropdown button
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(0.0),
+                              child: DropdownButtonHideUnderline(
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: DropdownButton(
+                                    isExpanded: true,
+                                    value: selectedCargo,
+                                    iconSize: 30,
+                                    icon: (null),
+                                    style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 16,
+                                    ),
+                                    hint: Text('Cargo'),
+                                    items: data?.map(
+                                      (list) {
+                                        return DropdownMenuItem(
+                                          child: Text(list['cargo']),
+                                          value:
+                                              list['idtipousuario'].toString(),
+                                        );
+                                      },
+                                    ).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedCargo = value as String?;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            )),
+                      ),
                       TextFieldTxt(controller: _senhaController, text: 'Senha'),
-                      widget.idtipousuario == null
-                          ? _createButtonSubmit()
-                          : _createButtonUpdate()
+                      _createButtonSubmit()
                     ],
                   ),
                 ],
@@ -96,51 +158,46 @@ class _SingupState extends State<Singup> {
     );
   }
 
+  replace(String string) {
+    string = string.replaceAll('.', '');
+    string = string.replaceAll('-', '');
+    string = string.replaceAll('(', '');
+    string = string.replaceAll(')', '');
+    string = string.replaceAll('.', '');
+    string = string.replaceAll(' ', '');
+    return string;
+  }
+
   Widget _createButtonSubmit() {
     return ElevatedButton(
       onPressed: () {
-        String cargo = _cargoController.text.toString().trim();
-        if (cargo.isEmpty) {
-          _msg(context, 'Atenção', 'Digite o nome do cargo.');
-          return;
-        }
+        String nome = _nomeController.text.toString().trim();
+        String login = _loginController.text.toString().trim();
+        String email = _emailController.text.toString().trim();
+        String cpf = replace(_cpfController.text.toString().trim());
+        String telefone = replace(_telefoneController.text.toString().trim());
+        String idtipousuario = selectedCargo!;
+        String senha = _senhaController.text.toString().trim();
         setState(() {
-          UserType userType = UserType(idtipousuario: 0, cargo: cargo);
-          print(postToJson(userType));
-          createUserType(userType).then((response) {
-            if (response.statusCode == 200) {
+          User user = User(
+              idusuario: 0,
+              nome: nome,
+              login: login,
+              email: email,
+              cpf: cpf,
+              telefone: telefone,
+              idtipousuario: idtipousuario,
+              senha: senha);
+          createUser(user).then((response) {
+            if (response.statusCode == 201) {
               Navigator.pop(context, true);
             } else {
-              _msg(context, 'Atenção', 'Erro API.');
+              _msg(context, 'Atenção', response.body);
             }
           });
         });
       },
       child: const Text('Criar Cargo'),
-    );
-  }
-
-  Widget _createButtonUpdate() {
-    return ElevatedButton(
-      onPressed: () {
-        String cargo = _cargoController.text.toString().trim();
-        if (cargo.isEmpty) {
-          _msg(context, 'Atenção', 'Digite o nome do cargo.');
-          return;
-        }
-        setState(() {
-          UserType userType =
-              UserType(idtipousuario: widget.idtipousuario!, cargo: cargo);
-          updateUserType(userType).then((response) {
-            if (response.statusCode == 200) {
-              Navigator.pop(context, true);
-            } else {
-              _msg(context, 'Atenção', 'Erro API.');
-            }
-          });
-        });
-      },
-      child: const Text('Editar Cargo'),
     );
   }
 
@@ -153,24 +210,5 @@ class _SingupState extends State<Singup> {
             Navigator.pop(context);
           }),
     ]);
-  }
-
-  void drop(String? selectedValue) {
-    if (selectedValue is String) {
-      setState(() {
-        _dropValue = selectedValue;
-      });
-    }
-  }
-
-  String baseUrl = "http://localhost:8000/api";
-  Future<List<UserType>> _dropApi() async {
-    await http.get(Uri.parse("$baseUrl/tipousuario")).then((response) {
-      var data = json.decode(response.body);
-
-      setState(() {
-        List dropList = data;
-      });
-    });
   }
 }
