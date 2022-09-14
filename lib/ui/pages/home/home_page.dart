@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:chamaqvem/constants.dart';
+import 'package:chamaqvem/ui/pages/perfil/perfil_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +18,10 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: () => Get.toNamed('/verusuario'),
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => Perfil()));
+              },
               child: Text(
                 'Ver perfil',
                 style: TextStyle(fontSize: 20),

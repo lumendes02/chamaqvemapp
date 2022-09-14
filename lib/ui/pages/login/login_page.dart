@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:chamaqvem/constants.dart';
+import 'package:chamaqvem/models/user.dart';
 import 'package:chamaqvem/ui/pages/login/singup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -118,17 +119,18 @@ class LoginPage extends StatelessWidget {
 
   postData(email, senha) async {
     Get.toNamed('/home');
-    // try {
-    //   var response = await http.post(
-    //       Uri.parse('http://localhost:8000/api/login'),
-    //       body: {"login": email, "senha": senha});
-    //   final Map<String, dynamic> responseMap = jsonDecode(response.body);
-    //   box.write('token', 'Bearer ' + responseMap['token']);
-    //   box.write('user', responseMap['user']);
-    //   Get.toNamed('/home');
-    // } on Exception catch (e) {
-    //   print(e);
-    //   return false;
-    // }
+    try {
+      var response = await http.post(
+          Uri.parse('http://localhost:8000/api/login'),
+          body: {"login": email, "senha": senha});
+      final Map<String, dynamic> responseMap = jsonDecode(response.body);
+      box.write('token', 'Bearer ' + responseMap['token']);
+      box.write('user', responseMap['user']['idusuario']);
+      print(box.read('user'));
+      Get.toNamed('/home');
+    } on Exception catch (e) {
+      print(e);
+      return false;
+    }
   }
 }
