@@ -126,7 +126,6 @@ class LoginPage extends StatelessWidget {
       final Map<String, dynamic> responseMap = jsonDecode(response.body);
       box.write('token', 'Bearer ' + responseMap['token']);
       box.write('user', responseMap['user']['idusuario']);
-      print(box.read('user'));
       Get.toNamed('/home');
     } on Exception catch (e) {
       print(e);

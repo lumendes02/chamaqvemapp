@@ -19,32 +19,43 @@ class HomePage extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Perfil()));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Perfil(id: int.parse(box.read('user'))),
+                  ),
+                );
               },
-              child: Text(
+              child: const Text(
                 'Ver perfil',
                 style: TextStyle(fontSize: 20),
               ),
             ),
             TextButton(
               onPressed: () => Get.toNamed('/tipousuario'),
-              child: Text(
+              child: const Text(
                 'CRUD tipo usuario',
                 style: TextStyle(fontSize: 20),
               ),
             ),
             TextButton(
-              onPressed: () {},
-              child: Text(
-                'DIO',
+              onPressed: () => Get.toNamed('/lojas'),
+              child: const Text(
+                'CRUD Loja',
                 style: TextStyle(fontSize: 20),
               ),
             ),
             TextButton(
-              onPressed: () {},
-              child: Text(
-                'GetConnect',
+              onPressed: () => Get.toNamed('/cardapio'),
+              child: const Text(
+                'CRUD Cardapio',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Get.toNamed('/produto'),
+              child: const Text(
+                'CRUD Produto',
                 style: TextStyle(fontSize: 20),
               ),
             ),

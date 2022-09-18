@@ -1,9 +1,8 @@
 import 'dart:convert';
 
+import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/user_type.dart';
 import 'package:http/http.dart' as http;
-
-String baseUrl = "http://localhost:8000/api";
 
 Future<List<UserType>> getUserType() async {
   final response = await http.get(Uri.parse("$baseUrl/tipousuario"));

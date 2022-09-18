@@ -1,30 +1,35 @@
+import 'package:chamaqvem/models/cardapio.dart';
+import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/models/user_type.dart';
+import 'package:chamaqvem/services/cardapio_api.dart';
+import 'package:chamaqvem/services/loja_api.dart';
 import 'package:chamaqvem/ui/components/button.dart';
+import 'package:chamaqvem/ui/pages/cardapio/cardapio_form_page.dart';
+import 'package:chamaqvem/ui/pages/loja/loja_form_page.dart';
 import 'package:chamaqvem/ui/pages/tipo_usuario/tipo_usuario_form_page.dart';
 import 'package:chamaqvem/services/tipousuario_api.dart';
 import 'package:flutter/material.dart';
 
-class UserTypeList extends StatefulWidget {
-  const UserTypeList({Key? key}) : super(key: key);
+class CardapioList extends StatefulWidget {
+  const CardapioList({Key? key}) : super(key: key);
 
   @override
-  State<UserTypeList> createState() => _UserTypeListState();
+  State<CardapioList> createState() => _CardapioListState();
 }
 
-class _UserTypeListState extends State<UserTypeList> {
+class _CardapioListState extends State<CardapioList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista Tipo de Usuario'),
+        title: const Text('Lista Cardapios'),
         actions: <Widget>[
           GestureDetector(
             onTap: () async {
               bool? refresh = await Navigator.push(context,
                   MaterialPageRoute(builder: (context) {
-                return FormUserType();
+                return FormCardapio();
               }));
-
               if (refresh == true) {
                 setState(() {});
               }
@@ -38,21 +43,22 @@ class _UserTypeListState extends State<UserTypeList> {
       ),
       body: SafeArea(
           child: FutureBuilder(
-        future: getUserType(),
+        future: getCardapio(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Text(snapshot.error.toString()),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            var response = snapshot.data as List<UserType>;
+            var response = snapshot.data as List<Cardapio>;
 
             return ListView.builder(
               itemCount: response.length,
               itemBuilder: (context, position) {
                 var postItem = response[position];
-                var id = postItem.idtipousuario;
-                var nome = postItem.cargo;
+                var idloja = postItem.idloja;
+                var fantasia = postItem.fantasia;
+                var idcardapio = postItem.idcardapio;
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Card(
@@ -61,7 +67,7 @@ class _UserTypeListState extends State<UserTypeList> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          Text("$id - $nome",
+                          Text("$idcardapio - $fantasia",
                               style: Theme.of(context).textTheme.titleLarge),
                           Row(
                             mainAxisSize: MainAxisSize.max,
@@ -71,11 +77,11 @@ class _UserTypeListState extends State<UserTypeList> {
                                 icon: const Icon(Icons.edit),
                                 tooltip: 'Editar',
                                 onPressed: () async {
-                                  bool refresh = await Navigator.push(context,
+                                  bool? refresh = await Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return FormUserType(
-                                      idtipousuario: id,
-                                      cargo: nome,
+                                    return FormCardapio(
+                                      cardapio: postItem,
+                                      editar: true,
                                     );
                                   }));
                                   if (refresh == true) {
@@ -98,7 +104,7 @@ class _UserTypeListState extends State<UserTypeList> {
                                           actions: <Widget>[
                                             TextButton(
                                                 onPressed: () {
-                                                  deleteUserType(id)
+                                                  deleteCardapio(idcardapio)
                                                       .then((response) {
                                                     Navigator.pop(context);
                                                     setState(() {});

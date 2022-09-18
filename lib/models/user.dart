@@ -10,7 +10,7 @@ class User {
   String email;
   String cpf;
   String telefone;
-  String idtipousuario;
+  int idtipousuario;
   String senha;
   User({
     required this.idusuario,
@@ -22,4 +22,35 @@ class User {
     required this.idtipousuario,
     required this.senha,
   });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'idusuario': idusuario,
+      'nome': nome,
+      'login': login,
+      'email': email,
+      'cpf': cpf,
+      'telefone': telefone,
+      'idtipousuario': idtipousuario,
+      'senha': senha,
+    };
+  }
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      idusuario: map['idusuario'] as int,
+      nome: map['nome'] as String,
+      login: map['login'] as String,
+      email: map['email'] as String,
+      cpf: map['cpf'] as String,
+      telefone: map['telefone'] as String,
+      idtipousuario: map['idtipousuario'] as int,
+      senha: map['senha'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory User.fromJson(String source) =>
+      User.fromMap(json.decode(source) as Map<String, dynamic>);
 }
