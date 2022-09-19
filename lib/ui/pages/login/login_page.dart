@@ -127,6 +127,7 @@ class LoginPage extends StatelessWidget {
       box.write('token', 'Bearer ' + responseMap['token']);
       box.write('user', responseMap['user']['idusuario']);
       Get.toNamed('/home');
+      print(box.read('user'));
     } on Exception catch (e) {
       print(e);
       return false;

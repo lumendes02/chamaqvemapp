@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/user.dart';
 import 'package:chamaqvem/services/usuario_api.dart';
+import 'package:chamaqvem/ui/pages/perfil/perfil_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -104,6 +105,35 @@ class _PerfilState extends State<Perfil> {
                     ),
                     SizedBox(
                       height: 75,
+                      width: double.infinity,
+                      child: Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            minimumSize: const Size.fromHeight(50), // NEW
+                          ),
+                          onPressed: () async {
+                            bool? refresh = await Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return FormPerfil(
+                                usuario: response,
+                                editar: true,
+                              );
+                            }));
+                            print(refresh);
+                            if (refresh == true) {
+                              setState(() {});
+                            }
+                          },
+                          child: const Text(
+                            'Editar',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 40,
                       width: double.infinity,
                       child: Center(
                         child: ElevatedButton(

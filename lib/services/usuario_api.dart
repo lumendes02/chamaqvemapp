@@ -22,6 +22,17 @@ Future<http.Response> createUser(User user) async {
   return response;
 }
 
+Future<http.Response> updateUser(User user) async {
+  final id = user.idusuario.toString();
+  var body = user.toJson();
+  final response = await http.put(
+    Uri.parse("$baseUrl/usuario/$id"),
+    headers: {"Content-Type": "application/json"},
+    body: body,
+  );
+  return response;
+}
+
 Future<http.Response> desativarUser(int iduser) async {
   final id = iduser.toString();
   final response = await http.delete(Uri.parse("$baseUrl/tipousuario/$id"));

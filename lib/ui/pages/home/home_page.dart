@@ -21,8 +21,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        Perfil(id: int.parse(box.read('user'))),
+                    builder: (context) => Perfil(id: box.read('user')),
                   ),
                 );
               },
