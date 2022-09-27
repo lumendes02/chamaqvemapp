@@ -6,6 +6,7 @@ import 'package:chamaqvem/models/user.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/pages/login/singup_page.dart';
+import 'package:chamaqvem/ui/pages/loja/loja_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -23,11 +24,14 @@ class LoginPage extends StatelessWidget {
       child: Scaffold(
         body: Stack(children: [
           Container(
-            padding: const EdgeInsets.only(left: 35, top: 80),
-            child: const Text(
-              "ChamaQVEM",
-              style: TextStyle(color: Colors.black, fontSize: 33),
+            width: 2000,
+            height: 2000,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/login.png'),
+                  fit: BoxFit.cover),
             ),
+            padding: const EdgeInsets.only(left: 35, top: 80),
           ),
           SingleChildScrollView(
             child: Container(
@@ -75,21 +79,49 @@ class LoginPage extends StatelessWidget {
                           return Singup();
                         }));
                       },
-                      child: const Text(
-                        'REGISTRAR',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 51, 255, 0),
-                          fontSize: 27,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      child: Stack(
+                        children: <Widget>[
+                          Text(
+                            'REGISTRAR',
+                            style: TextStyle(
+                              fontSize: 20,
+                              decoration: TextDecoration.underline,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 3
+                                ..color = Colors.black,
+                            ),
+                          ),
+                          // Solid text as fill.
+                          const Text(
+                            'REGISTRAR',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    TextButton(
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.symmetric(horizontal: 54, vertical: 20)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(64.0),
+                                    side: BorderSide())),
+                      ),
                       onPressed: () async {
                         bool retorno = await postData(
                             EmailController.text, SenhaController.text);
                         if (retorno == true) {
-                          Get.toNamed('/home');
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return LojaList();
+                          }));
+                          //Get.toNamed('/home');
                         } else {
                           _msg(context, 'Atenção', 'Digite usuario valido.');
                           EmailController.text = '';
@@ -98,11 +130,7 @@ class LoginPage extends StatelessWidget {
                       },
                       child: const Text(
                         'LOGAR',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 51, 255, 0),
-                          fontSize: 27,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ],

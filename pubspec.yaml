@@ -30,6 +30,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   mask_text_input_formatter: ^2.4.0
   get_storage:
+  google_fonts: ^3.0.1
   flutter:
     sdk: flutter
 
@@ -62,6 +63,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

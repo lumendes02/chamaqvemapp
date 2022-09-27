@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   await GetStorage.init();
@@ -35,8 +36,28 @@ class MyApp extends StatelessWidget {
       ],
       builder: EasyLoading.init(),
       theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
+        ),
         primaryColor: Colors.purple[50],
-        scaffoldBackgroundColor: Colors.purple[400],
+        scaffoldBackgroundColor: Colors.purple[200],
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.purple[500],
+          foregroundColor: Colors.white,
+          shadowColor: Colors.purple[500],
+          centerTitle: true,
+          titleTextStyle: GoogleFonts.poppins(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.purple[500],
+            onPrimary: Colors.white,
+          ),
+        ),
       ),
     );
   }
