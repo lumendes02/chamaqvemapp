@@ -10,6 +10,20 @@ Future<List<Loja>> getLoja() async {
   return responseMap.map<Loja>((resp) => Loja.fromMap(resp)).toList();
 }
 
+Future<List<Loja>> getLojaEspecificousuario(idloja) async {
+  final id = idloja.toString();
+  final response = await http.get(Uri.parse("$baseUrl/loja/usuario/$id"));
+  final List<dynamic> responseMap = jsonDecode(response.body);
+  return responseMap.map<Loja>((resp) => Loja.fromMap(resp)).toList();
+}
+
+Future<List<Loja>> getLojaEspecifico(idusuario) async {
+  final id = idusuario.toString();
+  final response = await http.get(Uri.parse("$baseUrl/loja/$id"));
+  final List<dynamic> responseMap = jsonDecode(response.body);
+  return responseMap.map<Loja>((resp) => Loja.fromMap(resp)).toList();
+}
+
 Future<http.Response> createLoja(Loja loja) async {
   var body = loja.toJson();
 

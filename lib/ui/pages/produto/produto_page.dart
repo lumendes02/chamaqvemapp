@@ -1,3 +1,4 @@
+import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/models/produto.dart';
 import 'package:chamaqvem/models/user_type.dart';
@@ -11,7 +12,10 @@ import 'package:chamaqvem/services/tipousuario_api.dart';
 import 'package:flutter/material.dart';
 
 class ProdutoList extends StatefulWidget {
-  const ProdutoList({Key? key}) : super(key: key);
+  final int? idcardapio;
+  final int? idusuario;
+  const ProdutoList({this.idcardapio, this.idusuario, Key? key})
+      : super(key: key);
 
   @override
   State<ProdutoList> createState() => _ProdutoListState();
@@ -22,28 +26,16 @@ class _ProdutoListState extends State<ProdutoList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista Lojas'),
+        title: const Text('Lista Itens'),
         actions: <Widget>[
-          GestureDetector(
-            onTap: () async {
-              bool? refresh = await Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return FormProduto();
-              }));
-              if (refresh == true) {
-                setState(() {});
-              }
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: Icon(Icons.add),
-            ),
-          )
+          box.read('user') == widget.idusuario
+              ? _createButtonInserir()
+              : nada(),
         ],
       ),
       body: SafeArea(
           child: FutureBuilder(
-        future: getProduto(),
+        future: getProdutoCardapio(widget.idcardapio),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -62,67 +54,41 @@ class _ProdutoListState extends State<ProdutoList> {
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Text("$idproduto - $descricao",
-                              style: Theme.of(context).textTheme.titleLarge),
-                          Text("Preço: $preco",
-                              style: Theme.of(context).textTheme.titleSmall),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                tooltip: 'Editar',
-                                onPressed: () async {
-                                  bool? refresh = await Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return FormProduto(produto: postItem, editar: true,)
-                                  }));
-                                  if (refresh == true) {
-                                    setState(() {});
-                                  }
-                                },
+                    child: InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Container(
+                              height: 150,
+                              width: double.infinity,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                      'https://cdn.panelinha.com.br/receita/1443495600000-Pizza-de-mucarela-caseira.jpg'),
+                                ),
                               ),
-                              IconButton(
-                                color: Colors.red,
-                                icon: const Icon(Icons.delete),
-                                tooltip: 'Excluir',
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text("Deseja excluir?"),
-                                          content: const Text(
-                                              "Você perdera o dado para sempre."),
-                                          actions: <Widget>[
-                                            TextButton(
-                                                onPressed: () {
-                                                  deleteProduto(idproduto)
-                                                      .then((response) {
-                                                    Navigator.pop(context);
-                                                    setState(() {});
-                                                  });
-                                                },
-                                                child: const Text("Sim")),
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text("Não")),
-                                          ],
-                                        );
-                                      });
-                                },
-                              ),
-                            ],
-                          )
-                        ],
+                            ),
+                            Text(descricao.toUpperCase(),
+                                style: Theme.of(context).textTheme.titleLarge),
+                            Text("Preço: $preco",
+                                style: Theme.of(context).textTheme.titleSmall),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                box.read('user_type') == 1
+                                    ? _createButtonEditar(postItem)
+                                    : nada(),
+                                box.read('user_type') == 1
+                                    ? _createButtonDeletar(idproduto)
+                                    : nada()
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -136,6 +102,81 @@ class _ProdutoListState extends State<ProdutoList> {
           }
         },
       )),
+    );
+  }
+
+  Widget nada() {
+    return Container();
+  }
+
+  Widget _createButtonEditar(postItem) {
+    return IconButton(
+      icon: const Icon(Icons.edit),
+      tooltip: 'Editar',
+      onPressed: () async {
+        bool? refresh =
+            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return FormProduto(
+            produto: postItem,
+            editar: true,
+          );
+        }));
+        if (refresh == true) {
+          setState(() {});
+        }
+      },
+    );
+  }
+
+  Widget _createButtonDeletar(idproduto) {
+    return IconButton(
+      color: Colors.red,
+      icon: const Icon(Icons.delete),
+      tooltip: 'Excluir',
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Deseja excluir?"),
+              content: const Text("Você perdera o dado para sempre."),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      deleteProduto(idproduto).then((response) {
+                        Navigator.pop(context);
+                        setState(() {});
+                      });
+                    },
+                    child: const Text("Sim")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Não")),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _createButtonInserir() {
+    return GestureDetector(
+      onTap: () async {
+        bool? refresh =
+            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return FormProduto();
+        }));
+        if (refresh == true) {
+          setState(() {});
+        }
+      },
+      child: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.0),
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

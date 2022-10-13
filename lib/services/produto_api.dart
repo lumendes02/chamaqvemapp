@@ -10,6 +10,13 @@ Future<List<Produto>> getProduto() async {
   return responseMap.map<Produto>((resp) => Produto.fromMap(resp)).toList();
 }
 
+Future<List<Produto>> getProdutoCardapio(idcardapio) async {
+  final id = idcardapio.toString();
+  final response = await http.get(Uri.parse("$baseUrl/produtocardapio/$id"));
+  final List<dynamic> responseMap = jsonDecode(response.body);
+  return responseMap.map<Produto>((resp) => Produto.fromMap(resp)).toList();
+}
+
 Future<http.Response> createProduto(Produto produto) async {
   var body = produto.toJson();
 

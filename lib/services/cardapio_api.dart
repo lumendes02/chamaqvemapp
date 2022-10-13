@@ -10,6 +10,13 @@ Future<List<Cardapio>> getCardapio() async {
   return responseMap.map<Cardapio>((resp) => Cardapio.fromMap(resp)).toList();
 }
 
+Future<List<Cardapio>> getCardapioLoja(idloja) async {
+  final id = idloja.toString();
+  final response = await http.get(Uri.parse("$baseUrl/cardapioloja/$id"));
+  final List<dynamic> responseMap = jsonDecode(response.body);
+  return responseMap.map<Cardapio>((resp) => Cardapio.fromMap(resp)).toList();
+}
+
 Future<http.Response> createCardapio(Cardapio cardapio) async {
   var body = cardapio.toJson();
 
@@ -38,4 +45,13 @@ Future<http.Response> deleteCardapio(int idcardapioparam) async {
   final response =
       await http.delete(Uri.parse("$baseUrl/cardapio/$idcardapio"));
   return response;
+}
+
+Future<int> verificaUsuarioCardapio(int idusuario) async {
+  final id = idusuario.toString();
+  final response = await http.get(Uri.parse("$baseUrl/cardapioverifica/$id"));
+  if (response.statusCode == 201) {
+    return 1;
+  }
+  return 0;
 }

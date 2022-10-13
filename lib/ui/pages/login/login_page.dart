@@ -5,6 +5,7 @@ import 'package:chamaqvem/enums/button_enum.dart';
 import 'package:chamaqvem/models/user.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
+import 'package:chamaqvem/ui/components/Util_functions.dart';
 import 'package:chamaqvem/ui/pages/login/singup_page.dart';
 import 'package:chamaqvem/ui/pages/loja/loja_page.dart';
 import 'package:flutter/material.dart';
@@ -40,29 +41,32 @@ class LoginPage extends StatelessWidget {
                   left: 35,
                   top: MediaQuery.of(context).size.height * 0.5),
               child: Column(children: [
+                const SizedBox(
+                  height: 15,
+                ),
                 TextField(
                   controller: EmailController,
                   decoration: InputDecoration(
-                    fillColor: Colors.grey.shade100,
                     filled: true,
-                    hintText: 'Login',
+                    hintText: 'LOGIN',
+                    prefixIcon: const Icon(Icons.person),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(64),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 TextField(
                   controller: SenhaController,
                   obscureText: true,
                   decoration: InputDecoration(
-                    fillColor: Colors.grey.shade100,
                     filled: true,
-                    hintText: 'Senha',
+                    hintText: 'SENHA',
+                    prefixIcon: const Icon(Icons.lock),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(64),
                     ),
                   ),
                 ),
@@ -123,7 +127,8 @@ class LoginPage extends StatelessWidget {
                           }));
                           //Get.toNamed('/home');
                         } else {
-                          _msg(context, 'Atenção', 'Digite usuario valido.');
+                          //_msg(context, 'Atenção', 'Digite usuario valido.');
+                          ShowSnackBarMSG(context, 'lmao');
                           EmailController.text = '';
                           SenhaController.text = '';
                         }
@@ -168,6 +173,7 @@ class LoginPage extends StatelessWidget {
       if (response.statusCode == 201) {
         await box.write('token', 'Bearer ' + responseMap['token']);
         await box.write('user', responseMap['user']['idusuario']);
+        await box.write('user_type', responseMap['user']['idtipousuario']);
         EasyLoading.dismiss();
         return true;
       } else {
