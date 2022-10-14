@@ -8,6 +8,7 @@ import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/components/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
 class FormProduto extends StatefulWidget {
@@ -30,6 +31,7 @@ class _FormProdutoState extends State<FormProduto> {
   List? data;
 
   Future GetAllCardapio() async {
+    EasyLoading.show(status: 'Carregando');
     final response =
         await http.get(Uri.parse("http://localhost:8000/api/cardapio"));
     var jsonBody = response.body;
@@ -37,6 +39,7 @@ class _FormProdutoState extends State<FormProduto> {
 
     setState(() {
       data = jsonData;
+      EasyLoading.dismiss();
     });
 
     print(jsonData);

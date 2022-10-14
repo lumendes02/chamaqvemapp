@@ -23,23 +23,6 @@ class _LojaListState extends State<LojaList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista Lojas'),
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () async {
-              bool? refresh = await Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return FormLoja();
-              }));
-              if (refresh == true) {
-                setState(() {});
-              }
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: Icon(Icons.add),
-            ),
-          )
-        ],
       ),
       drawer: const NavigationDrawer(),
       body: SafeArea(

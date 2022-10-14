@@ -128,7 +128,7 @@ class LoginPage extends StatelessWidget {
                           //Get.toNamed('/home');
                         } else {
                           //_msg(context, 'Atenção', 'Digite usuario valido.');
-                          ShowSnackBarMSG(context, 'lmao');
+                          ShowSnackBarMSG(context, 'Error');
                           EmailController.text = '';
                           SenhaController.text = '';
                         }
