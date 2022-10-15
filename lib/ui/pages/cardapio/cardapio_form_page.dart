@@ -4,6 +4,7 @@ import 'package:chamaqvem/models/cardapio.dart';
 import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/services/cardapio_api.dart';
 import 'package:chamaqvem/services/loja_api.dart';
+import 'package:chamaqvem/ui/components/Util_functions.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/components/text_field.dart';
@@ -67,46 +68,66 @@ class _FormCardapioState extends State<FormCardapio> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            //background color of dropdown button
-                            border: Border.all(
-                                color: Colors.black38,
-                                width: 1), //border of dropdown button
-                            borderRadius: BorderRadius.circular(
-                                5), //border raiuds of dropdown button
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(0.0),
-                            child: DropdownButtonHideUnderline(
-                              child: ButtonTheme(
-                                alignedDropdown: true,
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  value: selectedLoja,
-                                  iconSize: 30,
-                                  icon: (null),
-                                  style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 16,
+                        decoration: BoxDecoration(
+                          //background color of dropdown button
+                          border: Border.all(
+                              color: Colors.black38,
+                              width: 1), //border of dropdown button
+                          borderRadius: BorderRadius.circular(
+                              5), //border raiuds of dropdown button
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(0.0),
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              canvasColor: Color.fromARGB(255, 237, 220, 240),
+                            ),
+                            child: DecoratedBox(
+                              decoration: const ShapeDecoration(
+                                color: Color.fromARGB(255, 237, 220, 240),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 0.5, style: BorderStyle.solid),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0)),
+                                ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.5),
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      value: selectedLoja,
+                                      iconSize: 30,
+                                      icon: (null),
+                                      style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                      ),
+                                      hint: Text('Loja'),
+                                      items: data?.map(
+                                        (list) {
+                                          return DropdownMenuItem(
+                                            child: Text(list['fantasia']),
+                                            value: list['idloja'].toString(),
+                                          );
+                                        },
+                                      ).toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedLoja = value as String;
+                                        });
+                                      },
+                                    ),
                                   ),
-                                  hint: Text('Loja'),
-                                  items: data?.map(
-                                    (list) {
-                                      return DropdownMenuItem(
-                                        child: Text(list['fantasia']),
-                                        value: list['idloja'].toString(),
-                                      );
-                                    },
-                                  ).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedLoja = value as String;
-                                    });
-                                  },
                                 ),
                               ),
                             ),
-                          )),
+                          ),
+                        ),
+                      ),
                     ),
                     TextFieldTxt(
                         controller: _fantasiaController, text: 'Fantasia'),
@@ -135,6 +156,7 @@ class _FormCardapioState extends State<FormCardapio> {
               Cardapio(idcardapio: 0, idloja: idloja, fantasia: fantasia);
           createCardapio(cardapio).then((response) {
             if (response.statusCode == 200) {
+              ShowSnackBarMSG(context, 'Cardapio criado');
               Navigator.pop(context, true);
             } else {
               _msg(context, 'Atenção', response.body);
@@ -162,6 +184,7 @@ class _FormCardapioState extends State<FormCardapio> {
               fantasia: fantasia);
           updateCardapio(cardapio).then((response) {
             if (response.statusCode == 200) {
+              ShowSnackBarMSG(context, 'Cardapio atualizado');
               Navigator.pop(context, true);
             } else {
               _msg(context, 'Atenção', 'Erro API.');

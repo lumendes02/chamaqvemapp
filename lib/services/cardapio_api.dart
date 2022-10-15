@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/cardapio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Cardapio>> getCardapio() async {
@@ -18,6 +19,7 @@ Future<List<Cardapio>> getCardapioLoja(idloja) async {
 }
 
 Future<http.Response> createCardapio(Cardapio cardapio) async {
+  EasyLoading.show(status: 'Carregando');
   var body = cardapio.toJson();
 
   final response = await http.post(
@@ -25,10 +27,12 @@ Future<http.Response> createCardapio(Cardapio cardapio) async {
     headers: {"Content-Type": "application/json"},
     body: body,
   );
+  EasyLoading.dismiss();
   return response;
 }
 
 Future<http.Response> updateCardapio(Cardapio cardapio) async {
+  EasyLoading.show(status: 'Carregando');
   final id = cardapio.idcardapio.toString();
   var body = cardapio.toJson();
 
@@ -37,13 +41,16 @@ Future<http.Response> updateCardapio(Cardapio cardapio) async {
     headers: {"Content-Type": "application/json"},
     body: body,
   );
+  EasyLoading.dismiss();
   return response;
 }
 
 Future<http.Response> deleteCardapio(int idcardapioparam) async {
+  EasyLoading.show(status: 'Carregando');
   final idcardapio = idcardapioparam.toString();
   final response =
       await http.delete(Uri.parse("$baseUrl/cardapio/$idcardapio"));
+  EasyLoading.dismiss();
   return response;
 }
 

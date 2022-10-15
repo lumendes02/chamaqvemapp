@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/loja.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Loja>> getLoja() async {
@@ -25,6 +26,7 @@ Future<List<Loja>> getLojaEspecifico(idusuario) async {
 }
 
 Future<http.Response> createLoja(Loja loja) async {
+  EasyLoading.show(status: 'Carregando');
   var body = loja.toJson();
 
   final response = await http.post(
@@ -32,10 +34,12 @@ Future<http.Response> createLoja(Loja loja) async {
     headers: {"Content-Type": "application/json"},
     body: body,
   );
+  EasyLoading.dismiss();
   return response;
 }
 
 Future<http.Response> updateLoja(Loja loja) async {
+  EasyLoading.show(status: 'Carregando');
   final id = loja.idloja.toString();
   var body = loja.toJson();
 
@@ -44,11 +48,14 @@ Future<http.Response> updateLoja(Loja loja) async {
     headers: {"Content-Type": "application/json"},
     body: body,
   );
+  EasyLoading.dismiss();
   return response;
 }
 
 Future<http.Response> deleteLoja(int idlojaparam) async {
+  EasyLoading.show(status: 'Carregando');
   final idloja = idlojaparam.toString();
   final response = await http.delete(Uri.parse("$baseUrl/loja/$idloja"));
+  EasyLoading.dismiss();
   return response;
 }

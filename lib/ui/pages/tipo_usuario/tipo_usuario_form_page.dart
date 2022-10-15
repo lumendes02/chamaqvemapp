@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'package:chamaqvem/enums/button_enum.dart';
 import 'package:chamaqvem/models/user_type.dart';
 import 'package:chamaqvem/services/tipousuario_api.dart';
+import 'package:chamaqvem/ui/components/Util_functions.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/components/text_field.dart';
@@ -68,6 +69,7 @@ class _FormUserTypeState extends State<FormUserType> {
           print(postToJson(userType));
           createUserType(userType).then((response) {
             if (response.statusCode == 200) {
+              ShowSnackBarMSG(context, 'Tipo usuario criado');
               Navigator.pop(context, true);
             } else {
               _msg(context, 'Atenção', 'Erro API.');
@@ -92,6 +94,7 @@ class _FormUserTypeState extends State<FormUserType> {
               UserType(idtipousuario: widget.idtipousuario!, cargo: cargo);
           updateUserType(userType).then((response) {
             if (response.statusCode == 200) {
+              ShowSnackBarMSG(context, 'Tipo usuario editado');
               Navigator.pop(context, true);
             } else {
               _msg(context, 'Atenção', 'Erro API.');

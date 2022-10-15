@@ -5,8 +5,8 @@ ShowSnackBarMSG(context, msg) {
     SnackBar(
       content: Container(
         child: Row(
-          children: const [
-            Expanded(
+          children: [
+            const Expanded(
               flex: 33,
               child: Text(
                 '',
@@ -16,11 +16,11 @@ ShowSnackBarMSG(context, msg) {
             Expanded(
               flex: 33,
               child: Text(
-                'Usuario Invalido',
+                msg,
                 style: TextStyle(color: Colors.black),
               ),
             ),
-            Expanded(
+            const Expanded(
               flex: 33,
               child: Text(
                 '',

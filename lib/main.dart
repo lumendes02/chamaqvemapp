@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.purple, //<-- SEE HERE
+          selectionColor: Colors.white,
         ),
         primaryColor: Colors.purple[50],
         scaffoldBackgroundColor: Colors.purple[200],
@@ -55,12 +56,14 @@ class MyApp extends StatelessWidget {
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
-          fillColor: Color.fromARGB(255, 227, 207, 231),
+          fillColor: Color.fromARGB(255, 237, 220, 240),
           iconColor: Colors.purple,
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 3, color: Colors.purple),
+            borderSide: BorderSide(width: 2, color: Colors.purple),
             borderRadius: BorderRadius.all(
-              Radius.circular(64.0),
+              Radius.circular(8.0),
             ),
           ),
         ),

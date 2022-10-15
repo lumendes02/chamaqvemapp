@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:chamaqvem/enums/button_enum.dart';
 import 'package:chamaqvem/models/user.dart';
 import 'package:chamaqvem/services/usuario_api.dart';
+import 'package:chamaqvem/ui/components/Util_functions.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/components/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,6 +39,7 @@ class _FormPerfilState extends State<FormPerfil> {
   List? data;
 
   Future GetAllCargos() async {
+    EasyLoading.show(status: 'Carregando');
     final response =
         await http.get(Uri.parse("http://localhost:8000/api/tipousuario"));
     var jsonBody = response.body;
@@ -44,6 +47,7 @@ class _FormPerfilState extends State<FormPerfil> {
 
     setState(() {
       data = jsonData;
+      EasyLoading.dismiss();
     });
 
     print(jsonData);
@@ -141,6 +145,7 @@ class _FormPerfilState extends State<FormPerfil> {
               senha: 'senha');
           updateUser(user).then((response) {
             if (response.statusCode == 200) {
+              ShowSnackBarMSG(context, 'Usuario editado');
               Navigator.pop(context, true);
             } else {
               _msg(context, 'Atenção', response.body);

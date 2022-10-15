@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/produto.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Produto>> getProduto() async {
@@ -18,6 +19,7 @@ Future<List<Produto>> getProdutoCardapio(idcardapio) async {
 }
 
 Future<http.Response> createProduto(Produto produto) async {
+  EasyLoading.show(status: 'Carregando');
   var body = produto.toJson();
 
   final response = await http.post(
@@ -25,10 +27,12 @@ Future<http.Response> createProduto(Produto produto) async {
     headers: {"Content-Type": "application/json"},
     body: body,
   );
+  EasyLoading.dismiss();
   return response;
 }
 
 Future<http.Response> updateProduto(Produto produto) async {
+  EasyLoading.show(status: 'Carregando');
   final id = produto.idproduto.toString();
   var body = produto.toJson();
 
@@ -37,11 +41,14 @@ Future<http.Response> updateProduto(Produto produto) async {
     headers: {"Content-Type": "application/json"},
     body: body,
   );
+  EasyLoading.dismiss();
   return response;
 }
 
 Future<http.Response> deleteProduto(int idprodutoparam) async {
+  EasyLoading.show(status: 'Carregando');
   final idloja = idprodutoparam.toString();
   final response = await http.delete(Uri.parse("$baseUrl/produto/$idloja"));
+  EasyLoading.dismiss();
   return response;
 }

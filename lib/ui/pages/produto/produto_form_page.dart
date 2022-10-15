@@ -4,6 +4,7 @@ import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/models/produto.dart';
 import 'package:chamaqvem/services/loja_api.dart';
 import 'package:chamaqvem/services/produto_api.dart';
+import 'package:chamaqvem/ui/components/Util_functions.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/components/text_field.dart';
@@ -150,6 +151,7 @@ class _FormProdutoState extends State<FormProduto> {
               desconto: desconto);
           createProduto(produto).then((response) {
             if (response.statusCode == 200) {
+              ShowSnackBarMSG(context, 'Produto criado');
               Navigator.pop(context, true);
             } else {
               _msg(context, 'Atenção', response.body);
@@ -181,6 +183,7 @@ class _FormProdutoState extends State<FormProduto> {
               desconto: desconto);
           updateProduto(produto).then((response) {
             if (response.statusCode == 200) {
+              ShowSnackBarMSG(context, 'Produto editado');
               Navigator.pop(context, true);
             } else {
               _msg(context, 'Atenção', 'Erro API.');
