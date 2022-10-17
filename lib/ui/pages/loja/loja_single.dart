@@ -1,5 +1,7 @@
+import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/services/loja_api.dart';
+import 'package:chamaqvem/ui/pages/cardapio/cardapio_form_page.dart';
 import 'package:chamaqvem/ui/pages/cardapio/cardapio_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -19,14 +21,7 @@ class _LojaSingleState extends State<LojaSingle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.6, 1],
-              colors: [Color.fromRGBO(156, 39, 176, 1), Colors.orange])),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
         bottomNavigationBar: BottomAppBar(
           color: Colors.transparent,
           elevation: 0,
@@ -58,7 +53,6 @@ class _LojaSingleState extends State<LojaSingle> {
                     Column(
                       children: [
                         Material(
-                          elevation: 20,
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             height: 220,
@@ -127,6 +121,9 @@ class _LojaSingleState extends State<LojaSingle> {
                                   const Divider(
                                     color: Colors.black,
                                   ),
+                                  box.read('user') == widget.idusuario
+                                      ? _createButtonPedido()
+                                      : nada(),
                                 ],
                               ),
                             ],
@@ -154,5 +151,21 @@ class _LojaSingleState extends State<LojaSingle> {
         ),
       ),
     );
+  }
+
+  Widget _createButtonPedido() {
+    return ListTile(
+      leading: const Icon(Icons.list),
+      title: const Text('PEDIDOS DA LOJA'),
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return CardapioList(idloja: 12, idusuario: 4);
+        }));
+      },
+    );
+  }
+
+  Widget nada() {
+    return Container();
   }
 }

@@ -1,20 +1,30 @@
 import 'package:chamaqvem/constants.dart';
+import 'package:chamaqvem/models/carrinho.dart';
 import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/models/produto.dart';
 import 'package:chamaqvem/models/user_type.dart';
+import 'package:chamaqvem/services/carrinho_api.dart';
 import 'package:chamaqvem/services/loja_api.dart';
 import 'package:chamaqvem/services/produto_api.dart';
+import 'package:chamaqvem/ui/components/Util_functions.dart';
 import 'package:chamaqvem/ui/components/button.dart';
+import 'package:chamaqvem/ui/controllers/cart_controller.dart';
+import 'package:chamaqvem/ui/pages/carrinho/carrinho_page.dart';
 import 'package:chamaqvem/ui/pages/loja/loja_form_page.dart';
 import 'package:chamaqvem/ui/pages/produto/produto_form_page.dart';
 import 'package:chamaqvem/ui/pages/tipo_usuario/tipo_usuario_form_page.dart';
 import 'package:chamaqvem/services/tipousuario_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 
 class ProdutoList extends StatefulWidget {
   final int? idcardapio;
   final int? idusuario;
-  const ProdutoList({this.idcardapio, this.idusuario, Key? key})
+  final int? idloja;
+  get cartController => Get.put(cartController());
+
+  const ProdutoList({this.idcardapio, this.idusuario, this.idloja, Key? key})
       : super(key: key);
 
   @override
@@ -28,6 +38,7 @@ class _ProdutoListState extends State<ProdutoList> {
       appBar: AppBar(
         title: const Text('Lista Itens'),
         actions: <Widget>[
+          _createButtonCarrinho(),
           box.read('user') == widget.idusuario
               ? _createButtonInserir()
               : nada(),
@@ -73,8 +84,39 @@ class _ProdutoListState extends State<ProdutoList> {
                             ),
                             Text(descricao.toUpperCase(),
                                 style: Theme.of(context).textTheme.titleLarge),
-                            Text("Preço: $preco",
-                                style: Theme.of(context).textTheme.titleSmall),
+                            Row(
+                              children: [
+                                Text("Preço: $preco",
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall),
+                                IconButton(
+                                    onPressed: () {
+                                      EasyLoading.show(status: 'Carregando');
+                                      Carrinho produto = Carrinho(
+                                          idcarrinho: 0,
+                                          idloja: widget.idloja!,
+                                          idproduto: postItem.idproduto,
+                                          idusuario: widget.idusuario!,
+                                          idstatus: 1,
+                                          preco: postItem.preco,
+                                          quantidade: 1,
+                                          descricao: '');
+                                      createItemCarrinho(produto)
+                                          .then((response) {
+                                        if (response.statusCode == 200) {
+                                          EasyLoading.dismiss();
+                                          ShowSnackBarMSG(context,
+                                              'Adicionado ao carrinho');
+                                          Navigator.pop(context, true);
+                                        } else {
+                                          EasyLoading.dismiss();
+                                          ShowSnackBarMSG(context, 'Erro api');
+                                        }
+                                      });
+                                    },
+                                    icon: const Icon(Icons.add_circle)),
+                              ],
+                            ),
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -176,6 +218,27 @@ class _ProdutoListState extends State<ProdutoList> {
       child: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0),
         child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _createButtonCarrinho() {
+    return GestureDetector(
+      onTap: () async {
+        bool? refresh =
+            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return CarrinhoList(
+            idloja: widget.idloja!,
+            idusuario: widget.idusuario!,
+          );
+        }));
+        if (refresh == true) {
+          setState(() {});
+        }
+      },
+      child: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.0),
+        child: Icon(Icons.shopping_cart),
       ),
     );
   }

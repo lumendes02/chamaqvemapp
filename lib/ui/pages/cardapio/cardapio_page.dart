@@ -70,6 +70,8 @@ class _CardapioListState extends State<CardapioList> {
                             MaterialPageRoute(builder: (context) {
                           return ProdutoList(
                             idcardapio: idcardapio,
+                            idusuario: widget.idusuario,
+                            idloja: widget.idloja,
                           );
                         }));
                         if (refresh == true) {
