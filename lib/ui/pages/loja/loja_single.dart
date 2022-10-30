@@ -3,6 +3,7 @@ import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/services/loja_api.dart';
 import 'package:chamaqvem/ui/pages/cardapio/cardapio_form_page.dart';
 import 'package:chamaqvem/ui/pages/cardapio/cardapio_page.dart';
+import 'package:chamaqvem/ui/pages/pedido/pedido_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -117,6 +118,18 @@ class _LojaSingleState extends State<LojaSingle> {
                                     leading: const Icon(Icons.store),
                                     title: const Text('MINHA LOJA'),
                                     onTap: () {},
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.announcement),
+                                    title: const Text('PEDIDOS'),
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                        return UsuarioPedidosList(
+                                          idloja: response.idloja,
+                                        );
+                                      }));
+                                    },
                                   ),
                                   const Divider(
                                     color: Colors.black,

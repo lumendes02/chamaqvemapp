@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/cardapio.dart';
 import 'package:chamaqvem/models/carrinho.dart';
+import 'package:chamaqvem/models/user.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,4 +72,11 @@ Future<int> verificaIgual(Carrinho carrinho) async {
       .get(Uri.parse("$baseUrl/carrinho/$idusuariop/$idlojap/$idprodutop"));
   final responseMap = jsonDecode(response.body);
   return responseMap;
+}
+
+Future<List<User>> getUsuariosPedido(idloja) async {
+  final idlojap = idloja.toString();
+  final response = await http.get(Uri.parse("$baseUrl/carrinholoja/$idlojap"));
+  final List<dynamic> responseMap = jsonDecode(response.body);
+  return responseMap.map<User>((resp) => User.fromMap(resp)).toList();
 }

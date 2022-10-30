@@ -1,20 +1,12 @@
-import 'dart:developer';
-
-import 'package:chamaqvem/constants.dart';
-import 'package:chamaqvem/models/cardapio.dart';
 import 'package:chamaqvem/models/carrinho.dart';
-import 'package:chamaqvem/models/loja.dart';
-import 'package:chamaqvem/models/user_type.dart';
+
 import 'package:chamaqvem/services/cardapio_api.dart';
 import 'package:chamaqvem/services/carrinho_api.dart';
-import 'package:chamaqvem/services/loja_api.dart';
+
 import 'package:chamaqvem/ui/components/Util_functions.dart';
-import 'package:chamaqvem/ui/components/button.dart';
+
 import 'package:chamaqvem/ui/pages/cardapio/cardapio_form_page.dart';
-import 'package:chamaqvem/ui/pages/loja/loja_form_page.dart';
-import 'package:chamaqvem/ui/pages/produto/produto_page.dart';
-import 'package:chamaqvem/ui/pages/tipo_usuario/tipo_usuario_form_page.dart';
-import 'package:chamaqvem/services/tipousuario_api.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
