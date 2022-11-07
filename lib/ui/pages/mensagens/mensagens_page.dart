@@ -1,27 +1,31 @@
+import 'dart:developer';
+
 import 'package:chamaqvem/constants.dart';
-import 'package:chamaqvem/models/carrinho.dart';
-import 'package:chamaqvem/models/user.dart';
+import 'package:chamaqvem/models/cardapio.dart';
+import 'package:chamaqvem/models/loja.dart';
+import 'package:chamaqvem/models/mensagemget.dart';
+import 'package:chamaqvem/models/user_type.dart';
 import 'package:chamaqvem/services/cardapio_api.dart';
-import 'package:chamaqvem/services/carrinho_api.dart';
+import 'package:chamaqvem/services/loja_api.dart';
 import 'package:chamaqvem/services/mensagem_api.dart';
-import 'package:chamaqvem/services/usuario_api.dart';
-import 'package:chamaqvem/ui/components/Util_functions.dart';
-import 'package:chamaqvem/ui/components/corcard.dart';
+import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/pages/cardapio/cardapio_form_page.dart';
-import 'package:chamaqvem/ui/pages/pedido/pedido_single.dart';
+import 'package:chamaqvem/ui/pages/loja/loja_form_page.dart';
+import 'package:chamaqvem/ui/pages/produto/produto_page.dart';
+import 'package:chamaqvem/ui/pages/tipo_usuario/tipo_usuario_form_page.dart';
+import 'package:chamaqvem/services/tipousuario_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-class UsuarioPedidosList extends StatefulWidget {
-  final int idloja;
+class MensagemList extends StatefulWidget {
+  final int idusuario;
 
-  const UsuarioPedidosList({required this.idloja, Key? key}) : super(key: key);
+  const MensagemList({required this.idusuario, Key? key}) : super(key: key);
 
   @override
-  State<UsuarioPedidosList> createState() => _UsuarioPedidosListState();
+  State<MensagemList> createState() => _MensagemListState();
 }
 
-class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
+class _MensagemListState extends State<MensagemList> {
   @override
   void initState() {
     super.initState();
@@ -32,88 +36,65 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pedidos'),
+        title: const Text('Suas Mensagens'),
       ),
       body: SafeArea(
           child: FutureBuilder(
-        future: getUserPedidosAtivos(widget.idloja),
+        future: getMensagemUsuario(widget.idusuario),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Text(snapshot.error.toString()),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            var response = snapshot.data as List<User>;
+            var response = snapshot.data as List<MensagemGet>;
 
             return ListView.builder(
               itemCount: response.length,
               itemBuilder: (context, position) {
                 var postItem = response[position];
-                var fantasia = postItem.nome;
-                var itens = postItem.idtipousuario;
-                var cor = int.parse(postItem.email);
-
+                var lojafantasia = postItem.fantasia;
+                var titulo = postItem.titulo;
+                var texto = postItem.textomensagem;
+                var data = formatadata(postItem.created_at);
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Card(
-                    color: cor == 2 ? Colors.green[100] : Colors.grey,
                     child: InkWell(
-                      onTap: () async {
-                        bool? refresh = await Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ProdutoListUsuario(
-                            idusuario: postItem.idusuario,
-                            idloja: widget.idloja,
-                            idstatus: int.parse(postItem.email),
-                          );
-                        }));
-                        if (refresh == true) {
-                          setState(() {});
-                        }
-                      },
+                      onTap: () async {},
                       child: Padding(
-                        padding: const EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 4,
-                                  child: Container(
-                                    height: 75,
-                                    width: 75,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.contain,
-                                        image: NetworkImage(
-                                            'https://cdn.icon-icons.com/icons2/933/PNG/512/user-shape_icon-icons.com_72487.png'),
+                            Center(
+                              child: Text(titulo.toUpperCase(),
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge),
+                            ),
+                            Container(
+                              height: 50,
+                              width: double.infinity,
+                              color: Colors.grey[400],
+                              child: Center(
+                                child: Text(texto),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 2, 2, 0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: Text('$data'),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 6,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 0, 16),
-                                        child: Text(fantasia.toUpperCase(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge),
-                                      ),
-                                      Text('Itens: $itens',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -131,6 +112,14 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
         },
       )),
     );
+  }
+
+  formatadata(texto) {
+    //2022-11-05
+    String ano = texto.substring(0, 4); //2022
+    String mes = texto.substring(5, 7); //11
+    String dia = texto.substring(8, 10); //05
+    return '$dia/$mes/$ano';
   }
 
   Widget _createButtonEditar(postItem) {

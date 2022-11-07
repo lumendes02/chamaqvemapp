@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chamaqvem/constants.dart';
+import 'package:chamaqvem/models/pedido.dart';
 import 'package:chamaqvem/models/produto.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +17,15 @@ Future<List<Produto>> getProdutoCardapio(idcardapio) async {
   final response = await http.get(Uri.parse("$baseUrl/produtocardapio/$id"));
   final List<dynamic> responseMap = jsonDecode(response.body);
   return responseMap.map<Produto>((resp) => Produto.fromMap(resp)).toList();
+}
+
+Future<List<Pedido>> getProdutoPedidoUsuario(idusuario, idloja) async {
+  final idusuariop = idusuario.toString();
+  final idlojap = idloja.toString();
+  final response = await http
+      .get(Uri.parse("$baseUrl/produtosPedidos/$idusuariop/$idlojap"));
+  final List<dynamic> responseMap = jsonDecode(response.body);
+  return responseMap.map<Pedido>((resp) => Pedido.fromMap(resp)).toList();
 }
 
 Future<http.Response> createProduto(Produto produto) async {

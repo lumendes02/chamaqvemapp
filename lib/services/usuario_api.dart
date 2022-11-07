@@ -13,6 +13,14 @@ Future<User> getUser(int idparam) async {
   return data;
 }
 
+Future<List<User>> getUserPedidosAtivos(int idparam) async {
+  final response = await http.get(
+    Uri.parse("$baseUrl/usuariopedidoativo/$idparam"),
+  );
+  final List<dynamic> responseMap = jsonDecode(response.body);
+  return responseMap.map<User>((resp) => User.fromMap(resp)).toList();
+}
+
 Future<http.Response> createUser(User user) async {
   EasyLoading.show(status: 'Carregando');
   var body = user.toJson();

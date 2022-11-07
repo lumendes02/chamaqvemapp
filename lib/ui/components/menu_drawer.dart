@@ -1,6 +1,7 @@
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/ui/pages/loja/loja_page.dart';
 import 'package:chamaqvem/ui/pages/loja/loja_single.dart';
+import 'package:chamaqvem/ui/pages/mensagens/mensagens_page.dart';
 import 'package:flutter/material.dart';
 
 class MenuDrawer extends StatefulWidget {
@@ -37,6 +38,18 @@ class _MenuDrawerState extends State<MenuDrawer> {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
                     return LojaSingle(
+                      idusuario: box.read('user'),
+                    );
+                  }));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.announcement_sharp),
+                title: const Text('MEU PEDIDO'),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return MensagemList(
                       idusuario: box.read('user'),
                     );
                   }));

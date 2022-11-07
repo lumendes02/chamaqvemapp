@@ -1,10 +1,12 @@
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/carrinho.dart';
 import 'package:chamaqvem/models/loja.dart';
+import 'package:chamaqvem/models/pedido.dart';
 import 'package:chamaqvem/models/produto.dart';
 import 'package:chamaqvem/models/user_type.dart';
 import 'package:chamaqvem/services/carrinho_api.dart';
 import 'package:chamaqvem/services/loja_api.dart';
+import 'package:chamaqvem/services/mensagem_api.dart';
 import 'package:chamaqvem/services/produto_api.dart';
 import 'package:chamaqvem/ui/components/Util_functions.dart';
 import 'package:chamaqvem/ui/components/button.dart';
@@ -18,42 +20,128 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
-class ProdutoList extends StatefulWidget {
-  final int? idcardapio;
+class ProdutoListUsuario extends StatefulWidget {
   final int? idusuario;
   final int? idloja;
+  final int? idstatus;
+
   get cartController => Get.put(cartController());
 
-  const ProdutoList({this.idcardapio, this.idusuario, this.idloja, Key? key})
+  const ProdutoListUsuario(
+      {this.idusuario, this.idloja, this.idstatus, Key? key})
       : super(key: key);
 
   @override
-  State<ProdutoList> createState() => _ProdutoListState();
+  State<ProdutoListUsuario> createState() => _ProdutoListUsuarioState();
 }
 
-class _ProdutoListState extends State<ProdutoList> {
+class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
+  @override
   @override
   Widget build(BuildContext context) {
+    bool _showAppbar = true;
+
+    if (2 == 2) {
+      _showAppbar = false;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista Itens'),
-        actions: <Widget>[
-          _createButtonCarrinho(),
-          box.read('user') == widget.idusuario
-              ? _createButtonInserir()
-              : nada(),
-        ],
+        title: const Text('Pedido'),
+        actions: <Widget>[],
       ),
+      bottomNavigationBar: _showAppbar
+          ? BottomAppBar(
+              color: Colors.transparent,
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, //Center Row contents horizontally,
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, //Center Row contents vertically,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: MediaQuery.of(context).size.width * 0.1,
+                        child: TextButton(
+                          onPressed: () {
+                            ativarItens(box.read('user'), widget.idloja)
+                                .then((response) {
+                              if (response.statusCode == 200) {
+                                createMensagem(box.read('user'), widget.idloja);
+                                EasyLoading.dismiss();
+                                ShowSnackBarMSG(context, 'Pedido feito');
+                                Navigator.pop(context, true);
+                              } else {
+                                EasyLoading.dismiss();
+                                ShowSnackBarMSG(context, 'Erro api');
+                              }
+                            });
+                          },
+                          child: const Text(
+                            'RECUSAR PEDIDO',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.red),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: MediaQuery.of(context).size.width * 0.1,
+                        child: TextButton(
+                          onPressed: () {
+                            ativarItens(box.read('user'), widget.idloja)
+                                .then((response) {
+                              if (response.statusCode == 200) {
+                                createMensagem(box.read('user'), widget.idloja);
+                                EasyLoading.dismiss();
+                                ShowSnackBarMSG(context, 'Pedido feito');
+                                Navigator.pop(context, true);
+                              } else {
+                                EasyLoading.dismiss();
+                                ShowSnackBarMSG(context, 'Erro api');
+                              }
+                            });
+                          },
+                          child: const Text(
+                            'ACEITAR PEDIDO',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.green),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : BottomAppBar(
+              color: Colors.transparent,
+              elevation: 0,
+            ),
       body: SafeArea(
           child: FutureBuilder(
-        future: getProdutoCardapio(widget.idcardapio),
+        future: getProdutoPedidoUsuario(widget.idusuario, widget.idloja),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Text(snapshot.error.toString()),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            var response = snapshot.data as List<Produto>;
+            var response = snapshot.data as List<Pedido>;
 
             return ListView.builder(
               itemCount: response.length,
@@ -62,6 +150,8 @@ class _ProdutoListState extends State<ProdutoList> {
                 var idproduto = postItem.idproduto;
                 var descricao = postItem.descricao;
                 var preco = postItem.preco;
+                var quantidade = postItem.quantidade;
+
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Card(
@@ -86,48 +176,17 @@ class _ProdutoListState extends State<ProdutoList> {
                                 style: Theme.of(context).textTheme.titleLarge),
                             Row(
                               children: [
-                                Text("Preço: $preco",
+                                Text("Preço: $preco x $quantidade",
                                     style:
                                         Theme.of(context).textTheme.titleSmall),
-                                IconButton(
-                                    onPressed: () {
-                                      EasyLoading.show(status: 'Carregando');
-                                      Carrinho produto = Carrinho(
-                                          idcarrinho: 0,
-                                          idloja: widget.idloja!,
-                                          idproduto: postItem.idproduto,
-                                          idusuario: box.read('user')!,
-                                          idstatus: 1,
-                                          preco: postItem.preco,
-                                          quantidade: 1,
-                                          descricao: '');
-                                      createItemCarrinho(produto)
-                                          .then((response) {
-                                        if (response.statusCode == 200) {
-                                          EasyLoading.dismiss();
-                                          ShowSnackBarMSG(context,
-                                              'Adicionado ao carrinho');
-                                        } else {
-                                          EasyLoading.dismiss();
-                                          ShowSnackBarMSG(context, 'Erro api');
-                                        }
-                                      });
-                                    },
-                                    icon: const Icon(Icons.add_circle)),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text("Quantidade: $quantidade",
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall),
                               ],
                             ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                box.read('user_type') == 1
-                                    ? _createButtonEditar(postItem)
-                                    : nada(),
-                                box.read('user_type') == 1
-                                    ? _createButtonDeletar(idproduto)
-                                    : nada()
-                              ],
-                            )
                           ],
                         ),
                       ),
@@ -228,7 +287,7 @@ class _ProdutoListState extends State<ProdutoList> {
             await Navigator.push(context, MaterialPageRoute(builder: (context) {
           return CarrinhoList(
             idloja: widget.idloja!,
-            idusuario: box.read('user')!,
+            idusuario: widget.idusuario!,
           );
         }));
         if (refresh == true) {

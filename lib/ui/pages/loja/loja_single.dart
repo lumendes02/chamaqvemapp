@@ -119,23 +119,12 @@ class _LojaSingleState extends State<LojaSingle> {
                                     title: const Text('MINHA LOJA'),
                                     onTap: () {},
                                   ),
-                                  ListTile(
-                                    leading: const Icon(Icons.announcement),
-                                    title: const Text('PEDIDOS'),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) {
-                                        return UsuarioPedidosList(
-                                          idloja: response.idloja,
-                                        );
-                                      }));
-                                    },
-                                  ),
                                   const Divider(
                                     color: Colors.black,
                                   ),
-                                  box.read('user') == widget.idusuario
-                                      ? _createButtonPedido()
+                                  // box.read('user')
+                                  1 == widget.idusuario
+                                      ? _createButtonPedido(response.idloja)
                                       : nada(),
                                 ],
                               ),
@@ -166,13 +155,13 @@ class _LojaSingleState extends State<LojaSingle> {
     );
   }
 
-  Widget _createButtonPedido() {
+  Widget _createButtonPedido(idloja) {
     return ListTile(
       leading: const Icon(Icons.list),
       title: const Text('PEDIDOS DA LOJA'),
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return CardapioList(idloja: 12, idusuario: 4);
+          return UsuarioPedidosList(idloja: idloja);
         }));
       },
     );

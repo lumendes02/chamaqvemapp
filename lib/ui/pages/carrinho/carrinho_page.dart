@@ -1,7 +1,9 @@
+import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/carrinho.dart';
 
 import 'package:chamaqvem/services/cardapio_api.dart';
 import 'package:chamaqvem/services/carrinho_api.dart';
+import 'package:chamaqvem/services/mensagem_api.dart';
 
 import 'package:chamaqvem/ui/components/Util_functions.dart';
 
@@ -47,9 +49,10 @@ class _CarrinhoListState extends State<CarrinhoList> {
                 width: 360,
                 child: TextButton(
                   onPressed: () {
-                    ativarItens(widget.idusuario, widget.idloja)
+                    ativarItens(box.read('user'), widget.idloja)
                         .then((response) {
                       if (response.statusCode == 200) {
+                        createMensagem(box.read('user'), widget.idloja);
                         EasyLoading.dismiss();
                         ShowSnackBarMSG(context, 'Pedido feito');
                         Navigator.pop(context, true);
@@ -59,7 +62,7 @@ class _CarrinhoListState extends State<CarrinhoList> {
                       }
                     });
                   },
-                  child: Text(
+                  child: const Text(
                     'FAZER PEDIDO',
                     style: TextStyle(color: Colors.white),
                   ),

@@ -16,7 +16,7 @@ class _UserDrawerState extends State<UserDrawer> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getUser(1),
+      future: getUser(box.read('user')),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var response = snapshot.data as User;
