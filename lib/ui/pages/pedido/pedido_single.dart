@@ -41,7 +41,7 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
   Widget build(BuildContext context) {
     bool _showAppbar = true;
 
-    if (2 == 2) {
+    if (widget.idstatus != 2) {
       _showAppbar = false;
     }
 
@@ -69,12 +69,13 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
                         height: MediaQuery.of(context).size.width * 0.1,
                         child: TextButton(
                           onPressed: () {
-                            ativarItens(box.read('user'), widget.idloja)
+                            recusarItens(widget.idusuario, widget.idloja)
                                 .then((response) {
                               if (response.statusCode == 200) {
-                                createMensagem(box.read('user'), widget.idloja);
+                                createMensagem(
+                                    widget.idusuario, widget.idloja, 'recusar');
                                 EasyLoading.dismiss();
-                                ShowSnackBarMSG(context, 'Pedido feito');
+                                ShowSnackBarMSG(context, 'Pedido Recusado');
                                 Navigator.pop(context, true);
                               } else {
                                 EasyLoading.dismiss();
@@ -100,12 +101,13 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
                         height: MediaQuery.of(context).size.width * 0.1,
                         child: TextButton(
                           onPressed: () {
-                            ativarItens(box.read('user'), widget.idloja)
+                            confirmarItens(widget.idusuario, widget.idloja)
                                 .then((response) {
                               if (response.statusCode == 200) {
-                                createMensagem(box.read('user'), widget.idloja);
+                                createMensagem(widget.idusuario, widget.idloja,
+                                    'confirmar');
                                 EasyLoading.dismiss();
-                                ShowSnackBarMSG(context, 'Pedido feito');
+                                ShowSnackBarMSG(context, 'Pedido confirmado');
                                 Navigator.pop(context, true);
                               } else {
                                 EasyLoading.dismiss();
