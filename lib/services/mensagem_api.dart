@@ -27,8 +27,8 @@ Future<http.Response> createMensagem(idusuario, idloja, acao) async {
         idusuario: idusuario,
         idloja: idloja,
         titulo: 'Seu produto foi recusado.',
-        textomensagem: 'Infelizmente o lojeiro recusei seu pedido.',
-        idstatus: 2);
+        textomensagem: 'Infelizmente o lojeiro recusou seu pedido.',
+        idstatus: 3);
   } else if (acao == 'confirmar') {
     mensagem = Mensagem(
         idmensagem: 0,
@@ -36,7 +36,7 @@ Future<http.Response> createMensagem(idusuario, idloja, acao) async {
         idloja: idloja,
         titulo: 'Seu produto foi aceito!',
         textomensagem: 'Aguardando finalizar para fazer entrega',
-        idstatus: 2);
+        idstatus: 4);
   }
   print(mensagem.textomensagem);
 

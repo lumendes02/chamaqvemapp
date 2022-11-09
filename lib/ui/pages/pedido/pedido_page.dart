@@ -1,5 +1,6 @@
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/carrinho.dart';
+import 'package:chamaqvem/models/pedido_display.dart';
 import 'package:chamaqvem/models/user.dart';
 import 'package:chamaqvem/services/cardapio_api.dart';
 import 'package:chamaqvem/services/carrinho_api.dart';
@@ -43,20 +44,24 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
               child: Text(snapshot.error.toString()),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            var response = snapshot.data as List<User>;
+            var response = snapshot.data as List<Pedidodisplay>;
 
             return ListView.builder(
               itemCount: response.length,
               itemBuilder: (context, position) {
                 var postItem = response[position];
                 var fantasia = postItem.nome;
-                var itens = postItem.idtipousuario;
-                var cor = int.parse(postItem.email);
+                var itens = postItem.quantidade;
+                var cor = postItem.idstatus;
 
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Card(
-                    color: cor == 2 ? Colors.green[100] : Colors.grey,
+                    color: cor == 2
+                        ? Colors.green[300]
+                        : cor == 4
+                            ? Colors.green
+                            : Colors.red,
                     child: InkWell(
                       onTap: () async {
                         bool? refresh = await Navigator.push(context,
@@ -64,7 +69,7 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
                           return ProdutoListUsuario(
                             idusuario: postItem.idusuario,
                             idloja: widget.idloja,
-                            idstatus: int.parse(postItem.email),
+                            idstatus: postItem.idstatus,
                           );
                         }));
                         if (refresh == true) {

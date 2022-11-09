@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chamaqvem/constants.dart';
+import 'package:chamaqvem/models/pedido_display.dart';
 import 'package:chamaqvem/models/user.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -13,12 +14,14 @@ Future<User> getUser(int idparam) async {
   return data;
 }
 
-Future<List<User>> getUserPedidosAtivos(int idparam) async {
+Future<List<Pedidodisplay>> getUserPedidosAtivos(int idparam) async {
   final response = await http.get(
     Uri.parse("$baseUrl/usuariopedidoativo/$idparam"),
   );
   final List<dynamic> responseMap = jsonDecode(response.body);
-  return responseMap.map<User>((resp) => User.fromMap(resp)).toList();
+  return responseMap
+      .map<Pedidodisplay>((resp) => Pedidodisplay.fromMap(resp))
+      .toList();
 }
 
 Future<http.Response> createUser(User user) async {
