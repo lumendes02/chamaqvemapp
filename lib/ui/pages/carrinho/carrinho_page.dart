@@ -52,8 +52,8 @@ class _CarrinhoListState extends State<CarrinhoList> {
                     ativarItens(box.read('user'), widget.idloja)
                         .then((response) {
                       if (response.statusCode == 200) {
-                        createMensagem(
-                            box.read('user'), widget.idloja, 'ativar');
+                        createMensagem(box.read('user'), widget.idloja,
+                            int.parse(response.body), 'ativar');
                         EasyLoading.dismiss();
                         ShowSnackBarMSG(context, 'Pedido feito');
                         Navigator.pop(context, true);

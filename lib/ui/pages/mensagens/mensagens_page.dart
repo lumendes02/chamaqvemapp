@@ -57,6 +57,8 @@ class _MensagemListState extends State<MensagemList> {
                 var titulo = postItem.titulo;
                 var texto = postItem.textomensagem;
                 var data = formatadata(postItem.created_at);
+                var pedido = postItem.idpedido.toString();
+                var loja = postItem.fantasia;
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Card(
@@ -72,6 +74,11 @@ class _MensagemListState extends State<MensagemList> {
                                   style:
                                       Theme.of(context).textTheme.titleLarge),
                             ),
+                            Center(
+                              child: Text('Loja: ' + loja.toUpperCase(),
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium),
+                            ),
                             Container(
                               height: 50,
                               width: double.infinity,
@@ -84,6 +91,15 @@ class _MensagemListState extends State<MensagemList> {
                               padding: const EdgeInsets.fromLTRB(0, 2, 2, 0),
                               child: Row(
                                 children: [
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: Text('Pedido: $pedido'),
+                                      ),
+                                    ),
+                                  ),
                                   Expanded(
                                     child: Align(
                                       alignment: Alignment.centerRight,
@@ -115,11 +131,12 @@ class _MensagemListState extends State<MensagemList> {
   }
 
   formatadata(texto) {
-    //2022-11-05
+    //2022-11-13 17:56
     String ano = texto.substring(0, 4); //2022
     String mes = texto.substring(5, 7); //11
     String dia = texto.substring(8, 10); //05
-    return '$dia/$mes/$ano';
+    String horaminutos = texto.substring(11, 16); //17:45
+    return '$horaminutos - $dia/$mes/$ano';
   }
 
   Widget _createButtonEditar(postItem) {

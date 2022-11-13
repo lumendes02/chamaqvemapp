@@ -72,8 +72,8 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
                             recusarItens(widget.idusuario, widget.idloja)
                                 .then((response) {
                               if (response.statusCode == 200) {
-                                createMensagem(
-                                    widget.idusuario, widget.idloja, 'recusar');
+                                createMensagem(widget.idusuario, widget.idloja,
+                                    int.parse(response.body), 'recusar');
                                 EasyLoading.dismiss();
                                 ShowSnackBarMSG(context, 'Pedido Recusado');
                                 Navigator.pop(context, true);
@@ -105,7 +105,7 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
                                 .then((response) {
                               if (response.statusCode == 200) {
                                 createMensagem(widget.idusuario, widget.idloja,
-                                    'confirmar');
+                                    int.parse(response.body), 'confirmar');
                                 EasyLoading.dismiss();
                                 ShowSnackBarMSG(context, 'Pedido confirmado');
                                 Navigator.pop(context, true);

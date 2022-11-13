@@ -53,6 +53,7 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
                 var fantasia = postItem.nome;
                 var itens = postItem.quantidade;
                 var cor = postItem.idstatus;
+                var pedido = postItem.idpedido.toString();
 
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -111,6 +112,10 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
                                                 .textTheme
                                                 .titleLarge),
                                       ),
+                                      Text('Pedido: $pedido',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge),
                                       Text('Itens: $itens',
                                           style: Theme.of(context)
                                               .textTheme

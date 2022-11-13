@@ -10,6 +10,7 @@ class Mensagem {
   String titulo;
   String textomensagem;
   int idstatus;
+  int idpedido;
   Mensagem({
     required this.idmensagem,
     required this.idusuario,
@@ -17,6 +18,7 @@ class Mensagem {
     required this.titulo,
     required this.textomensagem,
     required this.idstatus,
+    required this.idpedido,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,6 +29,7 @@ class Mensagem {
       'titulo': titulo,
       'textomensagem': textomensagem,
       'idstatus': idstatus,
+      'idpedido': idpedido,
     };
   }
 
@@ -38,6 +41,7 @@ class Mensagem {
       titulo: map['titulo'] as String,
       textomensagem: map['textomensagem'] as String,
       idstatus: map['idstatus'] as int,
+      idpedido: map['idpedido'] as int,
     );
   }
 

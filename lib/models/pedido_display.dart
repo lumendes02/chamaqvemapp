@@ -8,12 +8,14 @@ class Pedidodisplay {
   String nome;
   int idstatus;
   String quantidade;
+  int idpedido;
 
   Pedidodisplay({
     required this.idusuario,
     required this.nome,
     required this.idstatus,
     required this.quantidade,
+    required this.idpedido,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class Pedidodisplay {
       'nome': nome,
       'idstatus': idstatus,
       'quantidade': quantidade,
+      'idpedido': idpedido,
     };
   }
 
@@ -31,6 +34,7 @@ class Pedidodisplay {
       nome: map['nome'] as String,
       idstatus: map['idstatus'] as int,
       quantidade: map['quantidade'] as String,
+      idpedido: map['idpedido'] as int,
     );
   }
 

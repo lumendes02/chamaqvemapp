@@ -12,6 +12,7 @@ class MensagemGet {
   int idstatus;
   String created_at;
   String fantasia;
+  int idpedido;
   MensagemGet({
     required this.idmensagem,
     required this.idusuario,
@@ -21,6 +22,7 @@ class MensagemGet {
     required this.idstatus,
     required this.created_at,
     required this.fantasia,
+    required this.idpedido,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,6 +35,7 @@ class MensagemGet {
       'idstatus': idstatus,
       'created_at': created_at,
       'fantasia': fantasia,
+      'idpedido': idpedido,
     };
   }
 
@@ -46,6 +49,7 @@ class MensagemGet {
       idstatus: map['idstatus'] as int,
       created_at: map['created_at'] as String,
       fantasia: map['fantasia'] as String,
+      idpedido: map['idpedido'] as int,
     );
   }
 
