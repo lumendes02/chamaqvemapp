@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:chamaqvem/enums/button_enum.dart';
-import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/models/produto.dart';
-import 'package:chamaqvem/services/loja_api.dart';
-import 'package:chamaqvem/services/mensagem_api.dart';
 import 'package:chamaqvem/services/produto_api.dart';
 import 'package:chamaqvem/ui/components/Util_functions.dart';
 import 'package:chamaqvem/ui/components/alert_message.dart';
 import 'package:chamaqvem/ui/components/button.dart';
+import 'package:chamaqvem/ui/components/selectImagens.dart';
 import 'package:chamaqvem/ui/components/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -16,8 +14,11 @@ import 'package:http/http.dart' as http;
 class FormProduto extends StatefulWidget {
   final Produto? produto;
   final bool? editar;
+  final int idcardapio;
 
-  const FormProduto({this.produto, this.editar, Key? key}) : super(key: key);
+  const FormProduto(
+      {this.produto, this.editar, required this.idcardapio, Key? key})
+      : super(key: key);
 
   @override
   State<FormProduto> createState() => _FormProdutoState();
@@ -30,7 +31,17 @@ class _FormProdutoState extends State<FormProduto> {
 
   String? selectedCardapio;
 
+  String? selectedImage;
+
   List? data;
+
+  var _selectedImageIndex = 0;
+  final _images = [
+    "https://receitinhas.com.br/wp-content/uploads/2022/09/230446.jpg",
+    "https://www.aovivodebrasilia.com.br/wp-content/uploads/2020/09/pizza.jpg",
+    "https://img.freepik.com/fotos-gratis/bife-de-frango-coberto-com-gergelim-branco-ervilhas-tomates-brocolis-e-abobora-em-um-prato-branco_1150-24770.jpg?w=2000",
+    "https://images5.alphacoders.com/407/407550.jpg",
+  ];
 
   Future GetAllCardapio() async {
     EasyLoading.show(status: 'Carregando');
@@ -72,55 +83,28 @@ class _FormProdutoState extends State<FormProduto> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            //background color of dropdown button
-                            border: Border.all(
-                                color: Colors.black38,
-                                width: 1), //border of dropdown button
-                            borderRadius: BorderRadius.circular(
-                                5), //border raiuds of dropdown button
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(0.0),
-                            child: DropdownButtonHideUnderline(
-                              child: ButtonTheme(
-                                alignedDropdown: true,
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  value: selectedCardapio,
-                                  iconSize: 30,
-                                  icon: (null),
-                                  style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 16,
-                                  ),
-                                  hint: Text('Cardapio'),
-                                  items: data?.map(
-                                    (list) {
-                                      return DropdownMenuItem(
-                                        child: Text(list['fantasia']),
-                                        value: list['idcardapio'].toString(),
-                                      );
-                                    },
-                                  ).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedCardapio = value as String;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          )),
-                    ),
                     TextFieldTxt(
                         controller: _descricaoController, text: 'Descricao'),
                     TextFieldTxt(controller: _precoController, text: 'Preco'),
-                    TextFieldTxt(
-                        controller: _descontoController, text: 'Desconto'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 14),
+                      child: Row(
+                        children: [
+                          for (int i = 0; i < _images.length; i++)
+                            SelectableImage(
+                              isSelected: _selectedImageIndex == i,
+                              onTap: (selectedImageIndex) {
+                                setState(() {
+                                  _selectedImageIndex = i;
+                                  selectedImage = _images[i];
+                                });
+                              },
+                              imageAsset: _images[i],
+                            ),
+                        ],
+                      ),
+                    ),
                     widget.produto?.idproduto == null
                         ? _createButtonSubmit()
                         : _createButtonUpdate()
@@ -133,66 +117,74 @@ class _FormProdutoState extends State<FormProduto> {
   }
 
   Widget _createButtonSubmit() {
-    return ElevatedButton(
-      onPressed: () {
-        String descricao = _descricaoController.text.toString().trim();
-        String preco = _precoController.text.toString().trim();
-        String desconto = _descontoController.text.toString().trim();
-        int idcardapio = int.parse(selectedCardapio!);
-        if (descricao.isEmpty || preco.isEmpty || desconto.isEmpty) {
-          _msg(context, 'Atenção', 'Verifique dados do formulario.');
-          return;
-        }
-        setState(() {
-          Produto produto = Produto(
-              idproduto: 0,
-              idcardapio: idcardapio,
-              descricao: descricao,
-              preco: preco,
-              desconto: desconto);
-          createProduto(produto).then((response) {
-            if (response.statusCode == 200) {
-              ShowSnackBarMSG(context, 'Produto criado');
-              Navigator.pop(context, true);
-            } else {
-              _msg(context, 'Atenção', response.body);
-            }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.width * 0.1,
+      child: ElevatedButton(
+        onPressed: () {
+          String descricao = _descricaoController.text.toString().trim();
+          String preco = _precoController.text.toString().trim();
+
+          if (descricao.isEmpty || preco.isEmpty) {
+            _msg(context, 'Atenção', 'Verifique dados do formulario.');
+            return;
+          }
+          setState(() {
+            Produto produto = Produto(
+                idproduto: 0,
+                idcardapio: widget.idcardapio,
+                descricao: descricao,
+                preco: preco,
+                desconto: '0',
+                imagem: selectedImage!);
+            createProduto(produto).then((response) {
+              if (response.statusCode == 200) {
+                ShowSnackBarMSG(context, 'Produto criado');
+                Navigator.pop(context, true);
+              } else {
+                _msg(context, 'Atenção', response.body);
+              }
+            });
           });
-        });
-      },
-      child: const Text('Criar Produto'),
+        },
+        child: const Text('Criar Produto'),
+      ),
     );
   }
 
   Widget _createButtonUpdate() {
-    return ElevatedButton(
-      onPressed: () {
-        String descricao = _descricaoController.text.toString().trim();
-        String preco = _precoController.text.toString().trim();
-        String desconto = _descontoController.text.toString().trim();
-        int idcardapio = int.parse(selectedCardapio!);
-        if (descricao.isEmpty || preco.isEmpty || desconto.isEmpty) {
-          _msg(context, 'Atenção', 'Verifique dados do formulario.');
-          return;
-        }
-        setState(() {
-          Produto produto = Produto(
-              idproduto: widget.produto!.idproduto,
-              idcardapio: idcardapio,
-              descricao: descricao,
-              preco: preco,
-              desconto: desconto);
-          updateProduto(produto).then((response) {
-            if (response.statusCode == 200) {
-              ShowSnackBarMSG(context, 'Produto editado');
-              Navigator.pop(context, true);
-            } else {
-              _msg(context, 'Atenção', 'Erro API.');
-            }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.width * 0.1,
+      child: ElevatedButton(
+        onPressed: () {
+          String descricao = _descricaoController.text.toString().trim();
+          String preco = _precoController.text.toString().trim();
+
+          if (descricao.isEmpty || preco.isEmpty) {
+            _msg(context, 'Atenção', 'Verifique dados do formulario.');
+            return;
+          }
+          setState(() {
+            Produto produto = Produto(
+                idproduto: widget.produto!.idproduto,
+                idcardapio: widget.idcardapio,
+                descricao: descricao,
+                preco: preco,
+                desconto: '0',
+                imagem: selectedImage!);
+            updateProduto(produto).then((response) {
+              if (response.statusCode == 200) {
+                ShowSnackBarMSG(context, 'Produto editado');
+                Navigator.pop(context, true);
+              } else {
+                _msg(context, 'Atenção', 'Erro API.');
+              }
+            });
           });
-        });
-      },
-      child: const Text('Editar Produto'),
+        },
+        child: const Text('Editar Produto'),
+      ),
     );
   }
 

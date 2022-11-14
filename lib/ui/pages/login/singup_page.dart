@@ -102,51 +102,6 @@ class _SingupState extends State<Singup> {
                           inputFormatters: [celularFormater],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              //background color of dropdown button
-                              border: Border.all(
-                                  color: Colors.black38,
-                                  width: 1), //border of dropdown button
-                              borderRadius: BorderRadius.circular(
-                                  5), //border raiuds of dropdown button
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(0.0),
-                              child: DropdownButtonHideUnderline(
-                                child: ButtonTheme(
-                                  alignedDropdown: true,
-                                  child: DropdownButton(
-                                    isExpanded: true,
-                                    value: selectedCargo,
-                                    iconSize: 30,
-                                    icon: (null),
-                                    style: const TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 16,
-                                    ),
-                                    hint: Text('Cargo'),
-                                    items: data?.map(
-                                      (list) {
-                                        return DropdownMenuItem(
-                                          child: Text(list['cargo']),
-                                          value:
-                                              list['idtipousuario'].toString(),
-                                        );
-                                      },
-                                    ).toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedCargo = value as String?;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                            )),
-                      ),
                       TextFieldTxt(controller: _senhaController, text: 'Senha'),
                       _createButtonSubmit()
                     ],
@@ -169,35 +124,39 @@ class _SingupState extends State<Singup> {
   }
 
   Widget _createButtonSubmit() {
-    return ElevatedButton(
-      onPressed: () {
-        String nome = _nomeController.text.toString().trim();
-        String login = _loginController.text.toString().trim();
-        String email = _emailController.text.toString().trim();
-        String cpf = replace(_cpfController.text.toString().trim());
-        String telefone = replace(_telefoneController.text.toString().trim());
-        int idtipousuario = int.parse(selectedCargo!);
-        String senha = _senhaController.text.toString().trim();
-        setState(() {
-          User user = User(
-              idusuario: 0,
-              nome: nome,
-              login: login,
-              email: email,
-              cpf: cpf,
-              telefone: telefone,
-              idtipousuario: idtipousuario,
-              senha: senha);
-          createUser(user).then((response) {
-            if (response.statusCode == 201) {
-              Navigator.pop(context, true);
-            } else {
-              _msg(context, 'Atenção', response.body);
-            }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.width * 0.1,
+      child: ElevatedButton(
+        onPressed: () {
+          String nome = _nomeController.text.toString().trim();
+          String login = _loginController.text.toString().trim();
+          String email = _emailController.text.toString().trim();
+          String cpf = replace(_cpfController.text.toString().trim());
+          String telefone = replace(_telefoneController.text.toString().trim());
+          int idtipousuario = int.parse(selectedCargo!);
+          String senha = _senhaController.text.toString().trim();
+          setState(() {
+            User user = User(
+                idusuario: 0,
+                nome: nome,
+                login: login,
+                email: email,
+                cpf: cpf,
+                telefone: telefone,
+                idtipousuario: 5,
+                senha: senha);
+            createUser(user).then((response) {
+              if (response.statusCode == 201) {
+                Navigator.pop(context, true);
+              } else {
+                _msg(context, 'Atenção', response.body);
+              }
+            });
           });
-        });
-      },
-      child: const Text('Criar Cargo'),
+        },
+        child: const Text('Criar Conta'),
+      ),
     );
   }
 

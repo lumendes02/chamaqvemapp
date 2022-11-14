@@ -1,17 +1,7 @@
-import 'package:chamaqvem/constants.dart';
-import 'package:chamaqvem/models/carrinho.dart';
 import 'package:chamaqvem/models/pedido_display.dart';
-import 'package:chamaqvem/models/user.dart';
-import 'package:chamaqvem/services/cardapio_api.dart';
-import 'package:chamaqvem/services/carrinho_api.dart';
-import 'package:chamaqvem/services/mensagem_api.dart';
 import 'package:chamaqvem/services/usuario_api.dart';
-import 'package:chamaqvem/ui/components/Util_functions.dart';
-import 'package:chamaqvem/ui/components/corcard.dart';
-import 'package:chamaqvem/ui/pages/cardapio/cardapio_form_page.dart';
 import 'package:chamaqvem/ui/pages/pedido/pedido_single.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class UsuarioPedidosList extends StatefulWidget {
   final int idloja;
@@ -34,6 +24,16 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pedidos'),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.refresh,
+            ),
+            onPressed: () {
+              setState(() {});
+            },
+          ),
+        ],
       ),
       body: SafeArea(
           child: FutureBuilder(
@@ -50,7 +50,7 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
               itemCount: response.length,
               itemBuilder: (context, position) {
                 var postItem = response[position];
-                var fantasia = postItem.nome;
+                var fantasia = postItem.nome.toUpperCase();
                 var itens = postItem.quantidade;
                 var cor = postItem.idstatus;
                 var pedido = postItem.idpedido.toString();
@@ -71,6 +71,7 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
                             idusuario: postItem.idusuario,
                             idloja: widget.idloja,
                             idstatus: postItem.idstatus,
+                            idpedido: postItem.idpedido,
                           );
                         }));
                         if (refresh == true) {
@@ -107,7 +108,7 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 0, 0, 16),
-                                        child: Text(fantasia.toUpperCase(),
+                                        child: Text('Cliente - $fantasia',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .titleLarge),
@@ -140,76 +141,6 @@ class _UsuarioPedidosListState extends State<UsuarioPedidosList> {
           }
         },
       )),
-    );
-  }
-
-  Widget _createButtonEditar(postItem) {
-    return IconButton(
-      icon: const Icon(Icons.edit),
-      tooltip: 'Editar',
-      onPressed: () async {
-        bool? refresh =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormCardapio(
-            cardapio: postItem,
-            editar: true,
-          );
-        }));
-        if (refresh == true) {
-          setState(() {});
-        }
-      },
-    );
-  }
-
-  Widget _createButtonDeletar(idcardapio) {
-    return IconButton(
-      color: Colors.red,
-      icon: const Icon(Icons.delete),
-      tooltip: 'Excluir',
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text("Deseja excluir?"),
-                content: const Text("Você perdera o dado para sempre."),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () {
-                        deleteCardapio(idcardapio).then((response) {
-                          Navigator.pop(context);
-                          setState(() {});
-                        });
-                      },
-                      child: const Text("Sim")),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Não")),
-                ],
-              );
-            });
-      },
-    );
-  }
-
-  Widget _createButtonInserir() {
-    return GestureDetector(
-      onTap: () async {
-        bool? refresh =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormCardapio();
-        }));
-        if (refresh == true) {
-          setState(() {});
-        }
-      },
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: Icon(Icons.add),
-      ),
     );
   }
 

@@ -11,6 +11,7 @@ class Loja {
   String endereco;
   String cnpj;
   String cep;
+  String imagem;
   Loja({
     required this.idloja,
     required this.idusuario,
@@ -19,6 +20,7 @@ class Loja {
     required this.endereco,
     required this.cnpj,
     required this.cep,
+    required this.imagem,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +32,7 @@ class Loja {
       'endereco': endereco,
       'cnpj': cnpj,
       'cep': cep,
+      'imagem': imagem,
     };
   }
 
@@ -42,6 +45,7 @@ class Loja {
       endereco: map['endereco'] as String,
       cnpj: map['cnpj'] as String,
       cep: map['cep'] as String,
+      imagem: map['imagem'] as String,
     );
   }
 

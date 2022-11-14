@@ -19,11 +19,13 @@ Future<List<Produto>> getProdutoCardapio(idcardapio) async {
   return responseMap.map<Produto>((resp) => Produto.fromMap(resp)).toList();
 }
 
-Future<List<Pedido>> getProdutoPedidoUsuario(idusuario, idloja) async {
+Future<List<Pedido>> getProdutoPedidoUsuario(
+    idusuario, idloja, idpedido) async {
   final idusuariop = idusuario.toString();
   final idlojap = idloja.toString();
-  final response = await http
-      .get(Uri.parse("$baseUrl/produtosPedidos/$idusuariop/$idlojap"));
+  final idpedidop = idpedido.toString();
+  final response = await http.get(
+      Uri.parse("$baseUrl/produtosPedidos/$idusuariop/$idlojap/$idpedidop"));
   final List<dynamic> responseMap = jsonDecode(response.body);
   return responseMap.map<Pedido>((resp) => Pedido.fromMap(resp)).toList();
 }

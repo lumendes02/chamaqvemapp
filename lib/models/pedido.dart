@@ -14,6 +14,7 @@ class Pedido {
   int idloja;
   int idstatus;
   int quantidade;
+  String imagem;
   Pedido({
     required this.idproduto,
     required this.idcardapio,
@@ -25,6 +26,7 @@ class Pedido {
     required this.idloja,
     required this.idstatus,
     required this.quantidade,
+    required this.imagem,
   });
 
   Map<String, dynamic> toMap() {
@@ -39,6 +41,7 @@ class Pedido {
       'idloja': idloja,
       'idstatus': idstatus,
       'quantidade': quantidade,
+      'imagem': imagem,
     };
   }
 
@@ -54,6 +57,7 @@ class Pedido {
       idloja: map['idloja'] as int,
       idstatus: map['idstatus'] as int,
       quantidade: map['quantidade'] as int,
+      imagem: map['imagem'] as String,
     );
   }
 

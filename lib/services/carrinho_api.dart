@@ -64,19 +64,28 @@ Future<http.Response> ativarItens(idusuario, idloja) async {
   return response;
 }
 
-Future<http.Response> confirmarItens(idusuario, idloja) async {
+Future<http.Response> confirmarItens(idpedido) async {
   EasyLoading.show(status: 'Carregando');
   final response = await http.put(
-      Uri.parse("$baseUrl/carrinhoconfirma/$idusuario/$idloja"),
+      Uri.parse("$baseUrl/carrinhoconfirma/$idpedido"),
       headers: {"Content-Type": "application/json"});
   EasyLoading.dismiss();
   return response;
 }
 
-Future<http.Response> recusarItens(idusuario, idloja) async {
+Future<http.Response> finalizarItens(idpedido) async {
+  EasyLoading.show(status: 'Carregando');
+  final response = await http.put(
+      Uri.parse("$baseUrl/carrinhofinaliza/$idpedido"),
+      headers: {"Content-Type": "application/json"});
+  EasyLoading.dismiss();
+  return response;
+}
+
+Future<http.Response> recusarItens(idpedido) async {
   EasyLoading.show(status: 'Carregando');
   final response = await http.delete(
-      Uri.parse("$baseUrl/carrinhopedidos/$idusuario/$idloja"),
+      Uri.parse("$baseUrl/carrinhopedidos/$idpedido"),
       headers: {"Content-Type": "application/json"});
   EasyLoading.dismiss();
   return response;

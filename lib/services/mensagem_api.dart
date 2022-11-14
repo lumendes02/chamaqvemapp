@@ -29,7 +29,7 @@ Future<http.Response> createMensagem(
         idmensagem: 0,
         idusuario: idusuario,
         idloja: idloja,
-        titulo: 'Seu produto foi recusado.',
+        titulo: 'Seu pedido foi recusado.',
         textomensagem: 'Infelizmente o lojeiro recusou seu pedido.',
         idstatus: 3,
         idpedido: idpedido);

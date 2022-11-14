@@ -7,10 +7,12 @@ class Cardapio {
   int idcardapio;
   int idloja;
   String fantasia;
+  String imagem;
   Cardapio({
     required this.idcardapio,
     required this.idloja,
     required this.fantasia,
+    required this.imagem,
   });
 
   Map<String, dynamic> toMap() {
@@ -18,6 +20,7 @@ class Cardapio {
       'idcardapio': idcardapio,
       'idloja': idloja,
       'fantasia': fantasia,
+      'imagem': imagem,
     };
   }
 
@@ -26,6 +29,7 @@ class Cardapio {
       idcardapio: map['idcardapio'] as int,
       idloja: map['idloja'] as int,
       fantasia: map['fantasia'] as String,
+      imagem: map['imagem'] as String,
     );
   }
 

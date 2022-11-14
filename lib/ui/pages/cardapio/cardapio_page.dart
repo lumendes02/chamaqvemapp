@@ -36,7 +36,7 @@ class _CardapioListState extends State<CardapioList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista Cardapios'),
+        title: const Text('Cardapios'),
         actions: <Widget>[
           box.read('user') == widget.idusuario
               ? _createButtonInserir()
@@ -86,11 +86,10 @@ class _CardapioListState extends State<CardapioList> {
                             Container(
                               height: 150,
                               width: double.infinity,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      'https://i1.wp.com/mercadoeconsumo.com.br/wp-content/uploads/2019/04/Que-comida-saud%C3%A1vel-que-nada-brasileiro-gosta-de-fast-food.jpg'),
+                                  image: NetworkImage(postItem.imagem),
                                 ),
                               ),
                             ),
@@ -139,6 +138,7 @@ class _CardapioListState extends State<CardapioList> {
           return FormCardapio(
             cardapio: postItem,
             editar: true,
+            idloja: widget.idloja,
           );
         }));
         if (refresh == true) {
@@ -186,7 +186,9 @@ class _CardapioListState extends State<CardapioList> {
       onTap: () async {
         bool? refresh =
             await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormCardapio();
+          return FormCardapio(
+            idloja: widget.idloja,
+          );
         }));
         if (refresh == true) {
           setState(() {});

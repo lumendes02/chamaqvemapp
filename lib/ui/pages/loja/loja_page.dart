@@ -1,13 +1,9 @@
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/loja.dart';
-import 'package:chamaqvem/models/user_type.dart';
 import 'package:chamaqvem/services/loja_api.dart';
-import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/components/navigationDrawer.dart';
 import 'package:chamaqvem/ui/pages/loja/loja_form_page.dart';
 import 'package:chamaqvem/ui/pages/loja/loja_single.dart';
-import 'package:chamaqvem/ui/pages/tipo_usuario/tipo_usuario_form_page.dart';
-import 'package:chamaqvem/services/tipousuario_api.dart';
 import 'package:flutter/material.dart';
 
 class LojaList extends StatefulWidget {
@@ -23,23 +19,6 @@ class _LojaListState extends State<LojaList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista Lojas'),
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () async {
-              bool? refresh = await Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return FormLoja();
-              }));
-              if (refresh == true) {
-                setState(() {});
-              }
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: Icon(Icons.add),
-            ),
-          )
-        ],
       ),
       drawer: const NavigationDrawer(),
       body: SafeArea(
@@ -60,6 +39,7 @@ class _LojaListState extends State<LojaList> {
                 var idloja = postItem.idloja;
                 var fantasia = postItem.fantasia;
                 var endereco = postItem.endereco;
+                var imagemLink = postItem.imagem;
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Card(
@@ -85,11 +65,10 @@ class _LojaListState extends State<LojaList> {
                             Container(
                               height: 150,
                               width: double.infinity,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      'https://conversagastronomica.com/wp-content/uploads/2016/11/imagem_release_787992.jpg'),
+                                  image: NetworkImage(imagemLink),
                                 ),
                               ),
                             ),

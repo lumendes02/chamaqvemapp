@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/tipousuario', page: () => UserTypeList()),
         GetPage(name: '/registrar', page: () => Singup()),
         GetPage(name: '/lojas', page: () => LojaList()),
-        GetPage(name: '/produto', page: () => ProdutoList()),
+        //GetPage(name: '/produto', page: () => ProdutoList()),
       ],
       builder: EasyLoading.init(),
       theme: ThemeData(

@@ -12,6 +12,7 @@ class Carrinho {
   int idstatus;
   int quantidade;
   String descricao;
+  String imagem;
   Carrinho({
     required this.idcarrinho,
     required this.idusuario,
@@ -21,6 +22,7 @@ class Carrinho {
     required this.idstatus,
     required this.quantidade,
     required this.descricao,
+    required this.imagem,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,6 +35,7 @@ class Carrinho {
       'idstatus': idstatus,
       'quantidade': quantidade,
       'descricao': descricao,
+      'imagem': imagem,
     };
   }
 
@@ -46,6 +49,7 @@ class Carrinho {
       idstatus: map['idstatus'] as int,
       quantidade: map['quantidade'] as int,
       descricao: map['descricao'] as String,
+      imagem: map['imagem'] as String,
     );
   }
 

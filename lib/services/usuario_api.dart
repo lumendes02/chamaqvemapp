@@ -49,6 +49,14 @@ Future<http.Response> updateUser(User user) async {
   return response;
 }
 
+Future<http.Response> mudaLojeiroUser(int iduser) async {
+  EasyLoading.show(status: 'Carregando');
+  final id = iduser.toString();
+  final response = await http.put(Uri.parse("$baseUrl/usuariolojeiro/$id"));
+  EasyLoading.dismiss();
+  return response;
+}
+
 Future<http.Response> desativarUser(int iduser) async {
   EasyLoading.show(status: 'Carregando');
   final id = iduser.toString();

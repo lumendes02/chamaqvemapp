@@ -9,12 +9,14 @@ class Produto {
   String descricao;
   String preco;
   String desconto;
+  String imagem;
   Produto({
     required this.idproduto,
     required this.idcardapio,
     required this.descricao,
     required this.preco,
     required this.desconto,
+    required this.imagem,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,6 +26,7 @@ class Produto {
       'descricao': descricao,
       'preco': preco,
       'desconto': desconto,
+      'imagem': imagem,
     };
   }
 
@@ -34,6 +37,7 @@ class Produto {
       descricao: map['descricao'] as String,
       preco: map['preco'] as String,
       desconto: map['desconto'] as String,
+      imagem: map['imagem'] as String,
     );
   }
 

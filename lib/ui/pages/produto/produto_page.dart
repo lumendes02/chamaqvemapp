@@ -1,30 +1,23 @@
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/carrinho.dart';
-import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/models/produto.dart';
-import 'package:chamaqvem/models/user_type.dart';
 import 'package:chamaqvem/services/carrinho_api.dart';
-import 'package:chamaqvem/services/loja_api.dart';
 import 'package:chamaqvem/services/produto_api.dart';
 import 'package:chamaqvem/ui/components/Util_functions.dart';
-import 'package:chamaqvem/ui/components/button.dart';
-import 'package:chamaqvem/ui/controllers/cart_controller.dart';
 import 'package:chamaqvem/ui/pages/carrinho/carrinho_page.dart';
-import 'package:chamaqvem/ui/pages/loja/loja_form_page.dart';
 import 'package:chamaqvem/ui/pages/produto/produto_form_page.dart';
-import 'package:chamaqvem/ui/pages/tipo_usuario/tipo_usuario_form_page.dart';
-import 'package:chamaqvem/services/tipousuario_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class ProdutoList extends StatefulWidget {
-  final int? idcardapio;
+  final int idcardapio;
   final int? idusuario;
   final int? idloja;
   get cartController => Get.put(cartController());
 
-  const ProdutoList({this.idcardapio, this.idusuario, this.idloja, Key? key})
+  const ProdutoList(
+      {required this.idcardapio, this.idusuario, this.idloja, Key? key})
       : super(key: key);
 
   @override
@@ -36,7 +29,7 @@ class _ProdutoListState extends State<ProdutoList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista Itens'),
+        title: const Text('Produtos'),
         actions: <Widget>[
           _createButtonCarrinho(),
           box.read('user') == widget.idusuario
@@ -74,11 +67,10 @@ class _ProdutoListState extends State<ProdutoList> {
                             Container(
                               height: 150,
                               width: double.infinity,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      'https://cdn.panelinha.com.br/receita/1443495600000-Pizza-de-mucarela-caseira.jpg'),
+                                  image: NetworkImage(postItem.imagem),
                                 ),
                               ),
                             ),
@@ -100,7 +92,8 @@ class _ProdutoListState extends State<ProdutoList> {
                                           idstatus: 1,
                                           preco: postItem.preco,
                                           quantidade: 1,
-                                          descricao: '');
+                                          descricao: '',
+                                          imagem: postItem.imagem);
                                       createItemCarrinho(produto)
                                           .then((response) {
                                         if (response.statusCode == 200) {
@@ -160,6 +153,7 @@ class _ProdutoListState extends State<ProdutoList> {
           return FormProduto(
             produto: postItem,
             editar: true,
+            idcardapio: widget.idcardapio!,
           );
         }));
         if (refresh == true) {
@@ -208,7 +202,9 @@ class _ProdutoListState extends State<ProdutoList> {
       onTap: () async {
         bool? refresh =
             await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormProduto();
+          return FormProduto(
+            idcardapio: widget.idcardapio!,
+          );
         }));
         if (refresh == true) {
           setState(() {});

@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class LojaSingle extends StatefulWidget {
   final int idusuario;
+
   const LojaSingle({required this.idusuario, Key? key}) : super(key: key);
 
   @override
@@ -57,11 +58,10 @@ class _LojaSingleState extends State<LojaSingle> {
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             height: 220,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image: NetworkImage(
-                                    'https://pbs.twimg.com/profile_images/2767740364/3397e4e9ee5da5f72641a156da009770_400x400.png'),
+                                image: NetworkImage(response.imagem),
                               ),
                             ),
                           ),
@@ -122,8 +122,9 @@ class _LojaSingleState extends State<LojaSingle> {
                                   const Divider(
                                     color: Colors.black,
                                   ),
+
                                   // box.read('user')
-                                  1 == widget.idusuario
+                                  box.read('user') == widget.idusuario
                                       ? _createButtonPedido(response.idloja)
                                       : nada(),
                                 ],

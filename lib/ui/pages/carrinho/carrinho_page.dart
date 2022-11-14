@@ -114,11 +114,10 @@ class _CarrinhoListState extends State<CarrinhoList> {
                                   child: Container(
                                     height: 150,
                                     width: 150,
-                                    decoration: const BoxDecoration(
+                                    decoration: BoxDecoration(
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            'https://i1.wp.com/mercadoeconsumo.com.br/wp-content/uploads/2019/04/Que-comida-saud%C3%A1vel-que-nada-brasileiro-gosta-de-fast-food.jpg'),
+                                        image: NetworkImage(postItem.imagem),
                                       ),
                                     ),
                                   ),
@@ -170,6 +169,7 @@ class _CarrinhoListState extends State<CarrinhoList> {
                                                         quantidade: postItem
                                                                 .quantidade -
                                                             1,
+                                                        imagem: postItem.imagem,
                                                         descricao: '');
                                                     updateQuantidade(produto)
                                                         .then((response) {
@@ -220,6 +220,7 @@ class _CarrinhoListState extends State<CarrinhoList> {
                                                         quantidade: postItem
                                                                 .quantidade +
                                                             1,
+                                                        imagem: postItem.imagem,
                                                         descricao: '');
                                                     updateQuantidade(produto)
                                                         .then((response) {
@@ -266,25 +267,6 @@ class _CarrinhoListState extends State<CarrinhoList> {
     );
   }
 
-  Widget _createButtonEditar(postItem) {
-    return IconButton(
-      icon: const Icon(Icons.edit),
-      tooltip: 'Editar',
-      onPressed: () async {
-        bool? refresh =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormCardapio(
-            cardapio: postItem,
-            editar: true,
-          );
-        }));
-        if (refresh == true) {
-          setState(() {});
-        }
-      },
-    );
-  }
-
   Widget _createButtonDeletar(idcardapio) {
     return IconButton(
       color: Colors.red,
@@ -315,24 +297,6 @@ class _CarrinhoListState extends State<CarrinhoList> {
               );
             });
       },
-    );
-  }
-
-  Widget _createButtonInserir() {
-    return GestureDetector(
-      onTap: () async {
-        bool? refresh =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormCardapio();
-        }));
-        if (refresh == true) {
-          setState(() {});
-        }
-      },
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: Icon(Icons.add),
-      ),
     );
   }
 

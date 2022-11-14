@@ -24,11 +24,12 @@ class ProdutoListUsuario extends StatefulWidget {
   final int? idusuario;
   final int? idloja;
   final int? idstatus;
+  final int? idpedido;
 
   get cartController => Get.put(cartController());
 
   const ProdutoListUsuario(
-      {this.idusuario, this.idloja, this.idstatus, Key? key})
+      {this.idusuario, this.idloja, this.idstatus, this.idpedido, Key? key})
       : super(key: key);
 
   @override
@@ -39,18 +40,18 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
   @override
   @override
   Widget build(BuildContext context) {
-    bool _showAppbar = true;
-
+    bool _showRecusaConfirma = true;
+    bool _showFinalizar = false;
     if (widget.idstatus != 2) {
-      _showAppbar = false;
+      _showRecusaConfirma = false;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pedido'),
+        title: Text('Pedido - ' + widget.idpedido.toString()),
         actions: <Widget>[],
       ),
-      bottomNavigationBar: _showAppbar
+      bottomNavigationBar: _showRecusaConfirma
           ? BottomAppBar(
               color: Colors.transparent,
               elevation: 0,
@@ -69,8 +70,7 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
                         height: MediaQuery.of(context).size.width * 0.1,
                         child: TextButton(
                           onPressed: () {
-                            recusarItens(widget.idusuario, widget.idloja)
-                                .then((response) {
+                            recusarItens(widget.idpedido).then((response) {
                               if (response.statusCode == 200) {
                                 createMensagem(widget.idusuario, widget.idloja,
                                     int.parse(response.body), 'recusar');
@@ -101,8 +101,7 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
                         height: MediaQuery.of(context).size.width * 0.1,
                         child: TextButton(
                           onPressed: () {
-                            confirmarItens(widget.idusuario, widget.idloja)
-                                .then((response) {
+                            confirmarItens(widget.idpedido).then((response) {
                               if (response.statusCode == 200) {
                                 createMensagem(widget.idusuario, widget.idloja,
                                     int.parse(response.body), 'confirmar');
@@ -133,10 +132,50 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
           : BottomAppBar(
               color: Colors.transparent,
               elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, //Center Row contents horizontally,
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, //Center Row contents vertically,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.width * 0.1,
+                      child: TextButton(
+                        onPressed: () {
+                          finalizarItens(widget.idpedido).then((response) {
+                            if (response.statusCode == 200) {
+                              createMensagem(widget.idusuario, widget.idloja,
+                                  int.parse(response.body), 'caminho');
+                              EasyLoading.dismiss();
+                              ShowSnackBarMSG(context, 'Pedido Finalizado');
+                              Navigator.pop(context, true);
+                            } else {
+                              EasyLoading.dismiss();
+                              ShowSnackBarMSG(context, 'Erro api');
+                            }
+                          });
+                        },
+                        child: const Text(
+                          'FINALIZAR PEDIDO',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.green),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
       body: SafeArea(
           child: FutureBuilder(
-        future: getProdutoPedidoUsuario(widget.idusuario, widget.idloja),
+        future: getProdutoPedidoUsuario(
+            widget.idusuario, widget.idloja, widget.idpedido),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -166,11 +205,10 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
                             Container(
                               height: 150,
                               width: double.infinity,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      'https://cdn.panelinha.com.br/receita/1443495600000-Pizza-de-mucarela-caseira.jpg'),
+                                  image: NetworkImage(postItem.imagem),
                                 ),
                               ),
                             ),
@@ -209,97 +247,5 @@ class _ProdutoListUsuarioState extends State<ProdutoListUsuario> {
 
   Widget nada() {
     return Container();
-  }
-
-  Widget _createButtonEditar(postItem) {
-    return IconButton(
-      icon: const Icon(Icons.edit),
-      tooltip: 'Editar',
-      onPressed: () async {
-        bool? refresh =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormProduto(
-            produto: postItem,
-            editar: true,
-          );
-        }));
-        if (refresh == true) {
-          setState(() {});
-        }
-      },
-    );
-  }
-
-  Widget _createButtonDeletar(idproduto) {
-    return IconButton(
-      color: Colors.red,
-      icon: const Icon(Icons.delete),
-      tooltip: 'Excluir',
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text("Deseja excluir?"),
-              content: const Text("Você perdera o dado para sempre."),
-              actions: <Widget>[
-                TextButton(
-                    onPressed: () {
-                      deleteProduto(idproduto).then((response) {
-                        Navigator.pop(context);
-                        setState(() {});
-                      });
-                    },
-                    child: const Text("Sim")),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Não")),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _createButtonInserir() {
-    return GestureDetector(
-      onTap: () async {
-        bool? refresh =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormProduto();
-        }));
-        if (refresh == true) {
-          setState(() {});
-        }
-      },
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-
-  Widget _createButtonCarrinho() {
-    return GestureDetector(
-      onTap: () async {
-        bool? refresh =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return CarrinhoList(
-            idloja: widget.idloja!,
-            idusuario: widget.idusuario!,
-          );
-        }));
-        if (refresh == true) {
-          setState(() {});
-        }
-      },
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: Icon(Icons.shopping_cart),
-      ),
-    );
   }
 }
