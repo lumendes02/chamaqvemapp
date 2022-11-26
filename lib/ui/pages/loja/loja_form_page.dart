@@ -45,7 +45,7 @@ class _FormLojaState extends State<FormLoja> {
   Future GetAllCargos() async {
     EasyLoading.show(status: 'Carregando');
     final response =
-        await http.get(Uri.parse("http://localhost:8000/api/cidade"));
+        await http.get(Uri.parse("http://lucasmendesdev.com.br/api/cidade"));
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
 

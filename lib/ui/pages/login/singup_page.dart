@@ -43,8 +43,8 @@ class _SingupState extends State<Singup> {
   List? data;
 
   Future GetAllCargos() async {
-    final response =
-        await http.get(Uri.parse("http://localhost:8000/api/tipousuario"));
+    final response = await http
+        .get(Uri.parse("http://lucasmendesdev.com.br/api/tipousuario"));
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
 

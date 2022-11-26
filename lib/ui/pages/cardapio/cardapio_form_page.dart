@@ -43,7 +43,7 @@ class _FormCardapioState extends State<FormCardapio> {
   Future GetAllLojas() async {
     EasyLoading.show(status: 'Carregando');
     final response =
-        await http.get(Uri.parse("http://localhost:8000/api/loja"));
+        await http.get(Uri.parse("http://lucasmendesdev.com.br/api/loja"));
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
 

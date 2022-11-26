@@ -167,7 +167,7 @@ class LoginPage extends StatelessWidget {
       EasyLoading.show(status: 'Entrando...');
 
       var response = await http.post(
-          Uri.parse('http://localhost:8000/api/login'),
+          Uri.parse('http://lucasmendesdev.com.br/api/login'),
           body: {"login": email, "senha": senha});
       final Map<String, dynamic> responseMap = jsonDecode(response.body);
       if (response.statusCode == 201) {
