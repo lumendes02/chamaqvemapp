@@ -52,8 +52,36 @@ class _UserDrawerState extends State<UserDrawer> {
             ),
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Material(
+            color: Colors.purple[500],
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return Perfil(
+                    id: box.read('user'),
+                  );
+                }));
+              },
+              child: Container(
+                padding: EdgeInsets.only(
+                    top: 12 + MediaQuery.of(context).padding.top, bottom: 12),
+                child: Column(
+                  children: const [
+                    CircleAvatar(
+                      radius: 52,
+                      backgroundImage: NetworkImage(
+                          'https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/200.gif'),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text('Carregando...')
+                  ],
+                ),
+              ),
+            ),
           );
         }
       },

@@ -134,7 +134,7 @@ class _SingupState extends State<Singup> {
           String email = _emailController.text.toString().trim();
           String cpf = replace(_cpfController.text.toString().trim());
           String telefone = replace(_telefoneController.text.toString().trim());
-          int idtipousuario = int.parse(selectedCargo!);
+          int idtipousuario = 5;
           String senha = _senhaController.text.toString().trim();
           setState(() {
             User user = User(

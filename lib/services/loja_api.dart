@@ -34,7 +34,6 @@ Future<http.Response> createLoja(Loja loja) async {
     headers: {"Content-Type": "application/json"},
     body: body,
   );
-  EasyLoading.dismiss();
   return response;
 }
 
