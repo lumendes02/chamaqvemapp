@@ -19,6 +19,16 @@ class _LojaListState extends State<LojaList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista Lojas'),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.refresh,
+            ),
+            onPressed: () {
+              setState(() {});
+            },
+          ),
+        ],
       ),
       drawer: const NavigationDrawer(),
       body: SafeArea(

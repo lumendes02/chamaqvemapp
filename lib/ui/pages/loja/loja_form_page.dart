@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/enums/button_enum.dart';
 import 'package:chamaqvem/models/loja.dart';
@@ -147,10 +148,16 @@ class _FormLojaState extends State<FormLoja> {
           setState(() {
             createLoja(loja).then((response) {
               if (response.statusCode == 200) {
-                mudaLojeiroUser(box.read('user'));
-                ShowSnackBarMSG(context, 'Loja criada');
-                Navigator.pop(context, true);
+                mudaLojeiroUser(box.read('user')).then((response) {
+                  if (response.statusCode == 200) {
+                    ShowSnackBarMSG(context, 'Loja criada');
+                    Navigator.pop(context, true);
+                  } else {
+                    ShowSnackBarMSG(context, 'error');
+                  }
+                });
               } else {
+                EasyLoading.dismiss();
                 _msg(context, 'Atenção', response.body);
               }
             });

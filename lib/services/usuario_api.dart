@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chamaqvem/constants.dart';
 import 'package:chamaqvem/models/pedido_display.dart';
 import 'package:chamaqvem/models/user.dart';
+import 'package:chamaqvem/models/user_type.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,6 +12,14 @@ Future<User> getUser(int idparam) async {
     Uri.parse("$baseUrl/usuario/$idparam"),
   );
   final data = User.fromJson(response.body);
+  return data;
+}
+
+Future<UserType> getUserType(int idparam) async {
+  final response = await http.get(
+    Uri.parse("$baseUrl/usuariotipo/$idparam"),
+  );
+  final data = UserType.fromJson(response.body);
   return data;
 }
 
@@ -50,9 +59,10 @@ Future<http.Response> updateUser(User user) async {
 }
 
 Future<http.Response> mudaLojeiroUser(int iduser) async {
-  EasyLoading.show(status: 'Carregando');
   final id = iduser.toString();
   final response = await http.put(Uri.parse("$baseUrl/usuariolojeiro/$id"));
+  await box.write('user_type', response.body);
+  print(box.read('user_type'));
   EasyLoading.dismiss();
   return response;
 }
