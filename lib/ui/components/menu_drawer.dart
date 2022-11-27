@@ -6,6 +6,7 @@ import 'package:chamaqvem/ui/pages/loja/loja_form_page.dart';
 import 'package:chamaqvem/ui/pages/loja/loja_page.dart';
 import 'package:chamaqvem/ui/pages/loja/loja_single.dart';
 import 'package:chamaqvem/ui/pages/mensagens/mensagens_page.dart';
+import 'package:chamaqvem/ui/pages/tipo_usuario/tipo_usuario_page.dart';
 import 'package:flutter/material.dart';
 
 class MenuDrawer extends StatefulWidget {
@@ -54,13 +55,70 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     ),
                     ListTile(
                       leading: const Icon(Icons.announcement_sharp),
-                      title: const Text('MEUS PEDIDO'),
+                      title: const Text('MEUS PEDIDOS'),
                       onTap: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           return MensagemList(
                             idusuario: box.read('user'),
                           );
+                        }));
+                      },
+                    ),
+                    const Divider(
+                      color: Colors.black,
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.exit_to_app),
+                      title: const Text('SAIR'),
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) {
+                          return LoginPage();
+                        }));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else if (response.idtipousuario == 1) {
+            return Material(
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                child: Wrap(
+                  runSpacing: 16,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.list),
+                      title: const Text('LISTA DE LOJAS'),
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return LojaList();
+                        }));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.announcement_sharp),
+                      title: const Text('MEUS PEDIDOS'),
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return MensagemList(
+                            idusuario: box.read('user'),
+                          );
+                        }));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.add),
+                      title: const Text('TIPOS USUARIOS'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return UserTypeList();
                         }));
                       },
                     ),
@@ -100,7 +158,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     ),
                     ListTile(
                       leading: const Icon(Icons.announcement_sharp),
-                      title: const Text('MEUS PEDIDO'),
+                      title: const Text('MEUS PEDIDOS'),
                       onTap: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {

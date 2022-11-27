@@ -74,15 +74,17 @@ class _MensagemListState extends State<MensagemList> {
                   child: Card(
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ProdutoListMensagem(
-                            idusuario: postItem.idusuario,
-                            idloja: postItem.idloja,
-                            idstatus: postItem.idstatus,
-                            idpedido: postItem.idpedido,
-                          );
-                        }));
+                        if (postItem.idstatus != 3) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ProdutoListMensagem(
+                              idusuario: postItem.idusuario,
+                              idloja: postItem.idloja,
+                              idstatus: postItem.idstatus,
+                              idpedido: postItem.idpedido,
+                            );
+                          }));
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),

@@ -39,15 +39,15 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
         textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Colors.purple, //<-- SEE HERE
+          cursorColor: Colors.red, //<-- SEE HERE
           selectionColor: Colors.white,
         ),
-        primaryColor: Colors.purple[50],
-        scaffoldBackgroundColor: Colors.purple[200],
+        primaryColor: Colors.orange[50],
+        scaffoldBackgroundColor: Colors.orange[200],
         appBarTheme: AppBarTheme(
-          backgroundColor: Color.fromRGBO(156, 39, 176, 1),
+          backgroundColor: Colors.red, //Color.fromARGB(255, 250, 89, 2),
           foregroundColor: Colors.white,
-          shadowColor: Colors.purple[500],
+          shadowColor: Colors.red[500],
           centerTitle: true,
           titleTextStyle: GoogleFonts.poppins(
             fontSize: 24,
@@ -57,11 +57,11 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: const InputDecorationTheme(
           fillColor: Color.fromARGB(255, 237, 220, 240),
-          iconColor: Colors.purple,
+          iconColor: Colors.red,
           filled: true,
           floatingLabelBehavior: FloatingLabelBehavior.never,
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 2, color: Colors.purple),
+            borderSide: BorderSide(width: 2, color: Colors.red),
             borderRadius: BorderRadius.all(
               Radius.circular(8.0),
             ),
@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            primary: Colors.purple[500],
+            primary: Colors.red[500],
             onPrimary: Colors.white,
           ),
         ),

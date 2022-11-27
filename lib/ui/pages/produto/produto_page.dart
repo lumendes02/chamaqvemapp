@@ -98,8 +98,8 @@ class _ProdutoListState extends State<ProdutoList> {
                                           .then((response) {
                                         if (response.statusCode == 200) {
                                           EasyLoading.dismiss();
-                                          ShowSnackBarMSG(context,
-                                              'Adicionado ao carrinho');
+                                          ShowSnackBarMSG(
+                                              context, 'Colocado no carrinho');
                                         } else {
                                           EasyLoading.dismiss();
                                           ShowSnackBarMSG(context, 'Erro api');

@@ -13,6 +13,7 @@ import 'package:chamaqvem/ui/components/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class FormLoja extends StatefulWidget {
   final Loja? loja;
@@ -29,6 +30,8 @@ class _FormLojaState extends State<FormLoja> {
   final _enderecoController = TextEditingController();
   final _cnpjController = TextEditingController();
   final _cepController = TextEditingController();
+  final cnpjFormater = MaskTextInputFormatter(mask: '##.###.###/####-##');
+  final cepFormater = MaskTextInputFormatter(mask: '#####-###');
 
   String? selectedCidade;
   String? selectedImage;
@@ -86,8 +89,26 @@ class _FormLojaState extends State<FormLoja> {
                         controller: _fantasiaController, text: 'Fantasia'),
                     TextFieldTxt(
                         controller: _enderecoController, text: 'Endereco'),
-                    TextFieldTxt(controller: _cnpjController, text: 'CNPJ'),
-                    TextFieldTxt(controller: _cepController, text: 'CEP'),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextField(
+                        controller: _cnpjController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                            hintText: "CNPJ", border: OutlineInputBorder()),
+                        inputFormatters: [cnpjFormater],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextField(
+                        controller: _cepController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                            hintText: "CEP", border: OutlineInputBorder()),
+                        inputFormatters: [cepFormater],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 12, horizontal: 14),
@@ -118,6 +139,17 @@ class _FormLojaState extends State<FormLoja> {
     );
   }
 
+  replace(String string) {
+    string = string.replaceAll('.', '');
+    string = string.replaceAll('-', '');
+    string = string.replaceAll('(', '');
+    string = string.replaceAll(')', '');
+    string = string.replaceAll('.', '');
+    string = string.replaceAll(' ', '');
+    string = string.replaceAll('/', '');
+    return string;
+  }
+
   Widget _createButtonSubmit() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
@@ -126,8 +158,8 @@ class _FormLojaState extends State<FormLoja> {
         onPressed: () {
           String fantasia = _fantasiaController.text.toString().trim();
           String endereco = _enderecoController.text.toString().trim();
-          String cnpj = _cnpjController.text.toString().trim();
-          String cep = _cepController.text.toString().trim();
+          String cnpj = replace(_cnpjController.text.toString().trim());
+          String cep = replace(_cepController.text.toString().trim());
 
           if (fantasia.isEmpty ||
               endereco.isEmpty ||
@@ -144,7 +176,9 @@ class _FormLojaState extends State<FormLoja> {
               endereco: endereco,
               cnpj: cnpj,
               cep: cep,
-              imagem: selectedImage!);
+              imagem: selectedImage == null
+                  ? "https://www.bellacapri.com.br/wp-content/uploads/2021/02/JAL-2.jpg"
+                  : selectedImage!);
           setState(() {
             createLoja(loja).then((response) {
               if (response.statusCode == 200) {

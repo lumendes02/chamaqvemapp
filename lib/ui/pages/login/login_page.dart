@@ -157,7 +157,7 @@ class LoginPage extends StatelessWidget {
         ..displayDuration = const Duration(milliseconds: 2000)
         ..loadingStyle =
             EasyLoadingStyle.custom //This was missing in earlier code
-        ..backgroundColor = Colors.purple
+        ..backgroundColor = Colors.red
         ..indicatorColor = Colors.white
         ..maskColor = Colors.black
         ..maskType = EasyLoadingMaskType.black

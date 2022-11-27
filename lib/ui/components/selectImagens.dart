@@ -20,7 +20,7 @@ class SelectableImage extends StatelessWidget {
           decoration: BoxDecoration(
               border: Border.all(
                   width: 3,
-                  color: isSelected ? Colors.purple : Colors.transparent)),
+                  color: isSelected ? Colors.red : Colors.transparent)),
           child: Image.network(imageAsset),
         ),
       ),

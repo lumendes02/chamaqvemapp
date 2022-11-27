@@ -57,52 +57,60 @@ class _FormUserTypeState extends State<FormUserType> {
   }
 
   Widget _createButtonSubmit() {
-    return ElevatedButton(
-      onPressed: () {
-        String cargo = _cargoController.text.toString().trim();
-        if (cargo.isEmpty) {
-          _msg(context, 'Atenção', 'Digite o nome do cargo.');
-          return;
-        }
-        setState(() {
-          UserType userType = UserType(idtipousuario: 0, cargo: cargo);
-          print(postToJson(userType));
-          createUserType(userType).then((response) {
-            if (response.statusCode == 200) {
-              ShowSnackBarMSG(context, 'Tipo usuario criado');
-              Navigator.pop(context, true);
-            } else {
-              _msg(context, 'Atenção', 'Erro API.');
-            }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.width * 0.1,
+      child: ElevatedButton(
+        onPressed: () {
+          String cargo = _cargoController.text.toString().trim();
+          if (cargo.isEmpty) {
+            _msg(context, 'Atenção', 'Digite o nome do cargo.');
+            return;
+          }
+          setState(() {
+            UserType userType = UserType(idtipousuario: 0, cargo: cargo);
+            print(postToJson(userType));
+            createUserType(userType).then((response) {
+              if (response.statusCode == 200) {
+                ShowSnackBarMSG(context, 'Tipo usuario criado');
+                Navigator.pop(context, true);
+              } else {
+                _msg(context, 'Atenção', 'Erro API.');
+              }
+            });
           });
-        });
-      },
-      child: const Text('Criar Cargo'),
+        },
+        child: const Text('Criar Cargo'),
+      ),
     );
   }
 
   Widget _createButtonUpdate() {
-    return ElevatedButton(
-      onPressed: () {
-        String cargo = _cargoController.text.toString().trim();
-        if (cargo.isEmpty) {
-          _msg(context, 'Atenção', 'Digite o nome do cargo.');
-          return;
-        }
-        setState(() {
-          UserType userType =
-              UserType(idtipousuario: widget.idtipousuario!, cargo: cargo);
-          updateUserType(userType).then((response) {
-            if (response.statusCode == 200) {
-              ShowSnackBarMSG(context, 'Tipo usuario editado');
-              Navigator.pop(context, true);
-            } else {
-              _msg(context, 'Atenção', 'Erro API.');
-            }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.width * 0.1,
+      child: ElevatedButton(
+        onPressed: () {
+          String cargo = _cargoController.text.toString().trim();
+          if (cargo.isEmpty) {
+            _msg(context, 'Atenção', 'Digite o nome do cargo.');
+            return;
+          }
+          setState(() {
+            UserType userType =
+                UserType(idtipousuario: widget.idtipousuario!, cargo: cargo);
+            updateUserType(userType).then((response) {
+              if (response.statusCode == 200) {
+                ShowSnackBarMSG(context, 'Tipo usuario editado');
+                Navigator.pop(context, true);
+              } else {
+                _msg(context, 'Atenção', 'Erro API.');
+              }
+            });
           });
-        });
-      },
-      child: const Text('Editar Cargo'),
+        },
+        child: const Text('Editar Cargo'),
+      ),
     );
   }
 

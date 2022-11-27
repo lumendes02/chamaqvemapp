@@ -134,7 +134,6 @@ class _SingupState extends State<Singup> {
           String email = _emailController.text.toString().trim();
           String cpf = replace(_cpfController.text.toString().trim());
           String telefone = replace(_telefoneController.text.toString().trim());
-          int idtipousuario = 5;
           String senha = _senhaController.text.toString().trim();
           setState(() {
             User user = User(
@@ -150,7 +149,7 @@ class _SingupState extends State<Singup> {
               if (response.statusCode == 201) {
                 Navigator.pop(context, true);
               } else {
-                _msg(context, 'Atenção', response.body);
+                _msg(context, 'Atenção', 'Verifique dados do formulario');
               }
             });
           });

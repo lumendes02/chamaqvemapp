@@ -61,11 +61,10 @@ class _ProdutoListMensagemState extends State<ProdutoListMensagem> {
                             Container(
                               height: 150,
                               width: double.infinity,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      'https://cdn.panelinha.com.br/receita/1443495600000-Pizza-de-mucarela-caseira.jpg'),
+                                  image: NetworkImage(postItem.imagem),
                                 ),
                               ),
                             ),

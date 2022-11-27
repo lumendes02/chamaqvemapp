@@ -21,7 +21,7 @@ class _UserDrawerState extends State<UserDrawer> {
         if (snapshot.hasData) {
           var response = snapshot.data as User;
           return Material(
-            color: Colors.purple[500],
+            color: Colors.red[500],
             child: InkWell(
               onTap: () {
                 Navigator.pop(context);
@@ -53,7 +53,7 @@ class _UserDrawerState extends State<UserDrawer> {
           );
         } else {
           return Material(
-            color: Colors.purple[500],
+            color: Colors.red[500],
             child: InkWell(
               onTap: () {
                 Navigator.pop(context);

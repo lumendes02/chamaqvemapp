@@ -36,7 +36,7 @@ Future<http.Response> updateQuantidade(Carrinho carrinho) async {
   var body = carrinho.toJson();
   if (carrinho.quantidade != 0) {
     final response = await http.put(
-      Uri.parse("$baseUrl/carrinho/"),
+      Uri.parse("$baseUrl/carrinho"),
       headers: {"Content-Type": "application/json"},
       body: body,
     );

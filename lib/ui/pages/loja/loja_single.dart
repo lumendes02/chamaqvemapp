@@ -3,6 +3,7 @@ import 'package:chamaqvem/models/loja.dart';
 import 'package:chamaqvem/services/loja_api.dart';
 import 'package:chamaqvem/ui/pages/cardapio/cardapio_form_page.dart';
 import 'package:chamaqvem/ui/pages/cardapio/cardapio_page.dart';
+import 'package:chamaqvem/ui/pages/loja/loja_form_page.dart';
 import 'package:chamaqvem/ui/pages/pedido/pedido_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -83,20 +84,7 @@ class _LojaSingleState extends State<LojaSingle> {
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.volume_up),
-                                      onPressed: () {},
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.volume_up),
-                                      onPressed: () {},
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.volume_up),
-                                      onPressed: () {},
-                                    ),
-                                  ],
+                                  children: [],
                                 ),
                               ),
                               Wrap(
@@ -114,11 +102,6 @@ class _LojaSingleState extends State<LojaSingle> {
                                       }));
                                     },
                                   ),
-                                  ListTile(
-                                    leading: const Icon(Icons.store),
-                                    title: const Text('MINHA LOJA'),
-                                    onTap: () {},
-                                  ),
                                   const Divider(
                                     color: Colors.black,
                                   ),
@@ -126,6 +109,9 @@ class _LojaSingleState extends State<LojaSingle> {
                                   // box.read('user')
                                   box.read('user') == widget.idusuario
                                       ? _createButtonPedido(response.idloja)
+                                      : nada(),
+                                  box.read('user') == widget.idusuario
+                                      ? _createButtonEditar(response)
                                       : nada(),
                                 ],
                               ),
@@ -163,6 +149,21 @@ class _LojaSingleState extends State<LojaSingle> {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return UsuarioPedidosList(idloja: idloja);
+        }));
+      },
+    );
+  }
+
+  Widget _createButtonEditar(loja) {
+    return ListTile(
+      leading: const Icon(Icons.edit),
+      title: const Text('EDITAR LOJA'),
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return FormLoja(
+            loja: loja,
+            editar: true,
+          );
         }));
       },
     );

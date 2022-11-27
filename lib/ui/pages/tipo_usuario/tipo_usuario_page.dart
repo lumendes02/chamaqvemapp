@@ -1,5 +1,4 @@
 import 'package:chamaqvem/models/user_type.dart';
-import 'package:chamaqvem/ui/components/button.dart';
 import 'package:chamaqvem/ui/pages/tipo_usuario/tipo_usuario_form_page.dart';
 import 'package:chamaqvem/services/tipousuario_api.dart';
 import 'package:flutter/material.dart';

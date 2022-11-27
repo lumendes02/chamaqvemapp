@@ -59,7 +59,7 @@ class _CarrinhoListState extends State<CarrinhoList> {
                         Navigator.pop(context, true);
                       } else {
                         EasyLoading.dismiss();
-                        ShowSnackBarMSG(context, 'Erro api');
+                        ShowSnackBarMSG(context, '  CARRINHO VAZIO');
                       }
                     });
                   },
@@ -68,7 +68,7 @@ class _CarrinhoListState extends State<CarrinhoList> {
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.purple),
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
                   ),
                 ),
               ),
