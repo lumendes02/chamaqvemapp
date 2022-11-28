@@ -113,8 +113,12 @@ class _ProdutoListState extends State<ProdutoList> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                _createButtonEditar(postItem),
-                                _createButtonDeletar(idproduto)
+                                box.read('user') == widget.idusuario
+                                    ? _createButtonEditar(postItem)
+                                    : nada(),
+                                box.read('user_type') == 6
+                                    ? _createButtonDeletar(idproduto)
+                                    : nada()
                               ],
                             )
                           ],
