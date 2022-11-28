@@ -102,12 +102,8 @@ class _CardapioListState extends State<CardapioList> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                box.read('user_type') == 1
-                                    ? _createButtonEditar(postItem)
-                                    : nada(),
-                                box.read('user_type') == 1
-                                    ? _createButtonDeletar(idcardapio)
-                                    : nada()
+                                _createButtonEditar(postItem),
+                                _createButtonDeletar(idcardapio)
                               ],
                             )
                           ],

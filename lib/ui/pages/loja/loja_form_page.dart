@@ -208,6 +208,7 @@ class _FormLojaState extends State<FormLoja> {
       height: MediaQuery.of(context).size.width * 0.1,
       child: ElevatedButton(
         onPressed: () {
+          box.write('user_type', 6);
           String fantasia = _fantasiaController.text.toString().trim();
           String endereco = _enderecoController.text.toString().trim();
           String cnpj = _cnpjController.text.toString().trim();
